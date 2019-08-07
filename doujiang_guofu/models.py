@@ -9,10 +9,10 @@ class EquipConfig(models.Model):
     class Meta:
         db_table = 'equip_config'
         permissions = (
-            ("equip_read_equip_config", "读取装备信息表权限"),
-            ("equip_change_equip_config", "更改装备信息表权限"),
-            ("equip_add_equip_config", "添加装备信息表权限"),
-            ("equip_delete_equip_config", "删除装备信息表权限"),
+            ("doujiang_guofu_read_equip_config", "读取装备信息表权限"),
+            ("doujiang_guofu_change_equip_config", "更改装备信息表权限"),
+            ("doujiang_guofu_add_equip_config", "添加装备信息表权限"),
+            ("doujiang_guofu_delete_equip_config", "删除装备信息表权限"),
         )
         verbose_name = '装备管理'
 
@@ -24,9 +24,9 @@ class Family(models.Model):
     class Meta:
         db_table = 'family_config'
         permissions = (
-            ("family_read_family_config", "读取装备信息表权限"),
-            ("family_change_family_config", "更改装备信息表权限"),
-            ("family_add_family_config", "添加装备信息表权限"),
-            ("family_delete_family_config", "删除装备信息表权限"),
+            ("doujiang_guofu_read_family", "读取装备信息表权限"),
+            ("doujiang_guofu_change_family", "更改装备信息表权限"),
+            ("doujiang_guofu_add_family", "添加装备信息表权限"),
+            ("doujiang_guofu_delete_family", "删除装备信息表权限"),
         )
         verbose_name = '家族管理'

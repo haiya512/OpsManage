@@ -44,7 +44,6 @@ class Log_Cron_Config(models.Model):
         default_permissions = ()
         verbose_name = '计划任务管理'  
         verbose_name_plural = '任务配置操作记录表'
-         
 
 
 class Sched_Node(models.Model):   
@@ -204,4 +203,3 @@ class Sched_Job_Logs(models.Model):
             "result":self.result,
         }
         return json_format                      
-                
