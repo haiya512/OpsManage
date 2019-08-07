@@ -16,6 +16,7 @@ from utils.logger import logger
 from django.http import JsonResponse
 from tasks.celery_assets import recordAssets
 from dao.base import DataHandle
+from dao.dj_guofu_game import FAMILY_BASE
 
 
 
@@ -543,7 +544,6 @@ def asset_info(request, id,format=None):
 @api_view(['GET', 'POST'])
 def asset_count(request,format=None): 
     return JsonResponse({"code":200,"msg":"success","data":{"projectCount":ASSETS_COUNT_RBT.projectAssets(),
-                                                            "statusCount":ASSETS_COUNT_RBT.statusAssets(),
                                                             "typeCount":ASSETS_COUNT_RBT.typeAssets(),
                                                             "zoneCount":ASSETS_COUNT_RBT.zoneAssets(),
                                                             "statusCount":ASSETS_COUNT_RBT.statusAssets(),
@@ -792,5 +792,10 @@ def tree_service(request,id,format=None):
             logger.error(msg="修改资产业务类型失败: {ex}".format(ex=str(ex)))
             return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)            
         return Response({})   
-     
-    
+
+
+@api_view(['GET', 'POST'])
+@permission_required('doujiang_guofu.family_read_family_config', raise_exception=True)
+def family_tree(request, format=None):
+    if request.method == 'GET':
+        return Response(FAMILY_BASE.tree(tree=None))

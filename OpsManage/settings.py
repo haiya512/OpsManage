@@ -79,7 +79,8 @@ INSTALLED_APPS = [
     'django_celery_beat',
     'django_celery_results',
     'websocket',
-    'apply'
+    'apply',
+    "doujiang_guofu",
 ]
 
 MIDDLEWARE = [

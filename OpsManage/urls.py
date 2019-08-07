@@ -13,10 +13,9 @@ Including another URLconf
     1. Import the include() function: from django.conf.urls import url, include
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
-from django.conf.urls import url,include
+from django.conf.urls import url, include
 from django.contrib import admin
-from OpsManage.views import index,users
-
+from OpsManage.views import index, users
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
@@ -28,15 +27,17 @@ urlpatterns = [
     url(r'^user/manage/$', users.UserManage.as_view()),
     url(r'^user/center/$', users.UserCenter.as_view()),
     url(r'^group/manage/$', users.GroupManage.as_view()),
-    url(r'^api/',include('api.urls')),
-    url(r'^assets/',include('asset.urls')),
-    url(r'^deploy/',include('deploy.urls')),
-    url(r'^db/',include('databases.urls')),
-    url(r'^sched/',include('sched.urls')),
-    url(r'^apps/',include('cicd.urls')),
-    url(r'^nav/',include('navbar.urls')),
-    url(r'^websocket/',include('websocket.urls')),
-    url(r'^wiki/',include('wiki.urls')),
-    url(r'^order/',include('orders.urls')),
-    url(r'^apply/',include('apply.urls')),
+    url(r'^api/', include('api.urls')),
+    url(r'^assets/', include('asset.urls')),
+    url(r'^deploy/', include('deploy.urls')),
+    url(r'^db/', include('databases.urls')),
+    url(r'^sched/', include('sched.urls')),
+    url(r'^apps/', include('cicd.urls')),
+    url(r'^nav/', include('navbar.urls')),
+    url(r'^websocket/', include('websocket.urls')),
+    url(r'^wiki/', include('wiki.urls')),
+    url(r'^order/', include('orders.urls')),
+    url(r'^apply/', include('apply.urls')),
+    # 斗将国服
+    url(r"^djgf/", include("doujiang_guofu.urls", namespace="doujiang_guofu")),
 ]
