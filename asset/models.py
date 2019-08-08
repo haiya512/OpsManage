@@ -289,7 +289,7 @@ class NetworkCard_Assets(models.Model):
         
 class Project_Assets(models.Model):
     '''产品线资产表'''
-    project_name = models.CharField(max_length=100,unique=True) 
+    project_name = models.CharField(max_length=100,unique=True)
     project_owner = models.SmallIntegerField(blank=True,null=True,verbose_name='项目负责人')
     class Meta:
         db_table = 'opsmanage_project_assets'
@@ -338,7 +338,7 @@ class Zone_Assets(models.Model):
             ("assets_change_zone", "更改机房资产权限"),
             ("assets_add_zone", "添加机房资产权限"),
             ("assets_delete_zone", "删除机房资产权限"),             
-        )  
+        )
         verbose_name = '资产管理'  
         verbose_name_plural = '机房资产表'     
         
@@ -383,17 +383,6 @@ class Raid_Assets(models.Model):
         verbose_name = '资产管理'  
         verbose_name_plural = 'Raid资产表' 
 
-class Log_Assets(models.Model): 
-    assets_id = models.IntegerField(verbose_name='资产类型id',blank=True,null=True,default=None)
-    assets_user = models.CharField(max_length=50,verbose_name='操作用户',default=None)
-    assets_content = models.CharField(max_length=100,verbose_name='名称',default=None)
-    assets_type = models.CharField(max_length=50,default=None)
-    create_time = models.DateTimeField(auto_now_add=True,blank=True,null=True,verbose_name='执行时间')
-    class Meta:
-        db_table = 'opsmanage_log_assets'
-        default_permissions = ()
-        verbose_name = '资产管理' 
-        verbose_name_plural = '项目配置操作记录表'      
         
 class Tags_Assets(models.Model): 
     tags_name = models.CharField(unique=True,max_length=100,verbose_name='名称',default=None)
