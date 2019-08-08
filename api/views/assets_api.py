@@ -26,7 +26,7 @@ def project_list(request, format=None):
         serializer = serializers.ProjectSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
-            #             #recordAssets.delay(user=str(request.user),content="添加产品线名称：{project_name}".format(project_name=request.data.get("project_name")),type="project",id=serializer.data.get('id'))
+            # recordAssets.delay(user=str(request.user),content="添加产品线名称：{project_name}".format(project_name=request.data.get("project_name")),type="project",id=serializer.data.get('id'))
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -45,10 +45,10 @@ def project_detail(request, id, format=None):
 
     elif request.method == 'PUT' and request.user.has_perm('asset.assets_change_project_assets'):
         serializer = serializers.ProjectSerializer(snippet, data=request.data)
-        old_name = snippet.project_name
+        # old_name = snippet.project_name
         if serializer.is_valid():
             serializer.save()
-            #             #recordAssets.delay(user=str(request.user),content="修改产品线为：{old_name} -> {project_name}".format(old_name=old_name,project_name=request.data.get("project_name")),type="project",id=id)
+            # recordAssets.delay(user=str(request.user),content="修改产品线为：{old_name} -> {project_name}".format(old_name=old_name,project_name=request.data.get("project_name")),type="project",id=id)
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -158,7 +158,7 @@ def group_detail(request, id, format=None):
 
     elif request.method == 'PUT' and request.user.has_perm('OpsManage.change_group'):
         serializer = serializers.GroupSerializer(snippet, data=request.data)
-        old_name = snippet.name
+        # old_name = snippet.name
         if serializer.is_valid():
             serializer.save()
             # recordAssets.delay(user=str(request.user),content="修改用户组名称：{old_name} -> {group_name}".format(old_name=old_name,group_name=request.data.get("name")),type="group",id=id)
