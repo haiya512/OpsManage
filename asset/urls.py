@@ -2,7 +2,7 @@ from django.conf.urls import url
 from . import views
 # from .views import article_add,upload_image,article_edit,article_index
 
-
+app_name = "assets"
 urlpatterns = [
     url(r'^config/$', views.Config.as_view()), 
     url(r'^manage/$', views.AssetsManage.as_view()), 

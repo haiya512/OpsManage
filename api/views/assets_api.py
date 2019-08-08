@@ -22,7 +22,9 @@ def project_list(request, format=None):
         snippets = Project_Assets.objects.all()
         serializer = serializers.ProjectSerializer(snippets, many=True)
         return Response(serializer.data)
-    elif request.method == 'POST' and request.user.has_perm('asset.assets_add_project_assets'):
+    elif request.method == 'POST':
+        if not request.user.has_perm('asset.assets_add_project_assets'):
+            return Response(status=status.HTTP_403_FORBIDDEN)
         serializer = serializers.ProjectSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -43,12 +45,15 @@ def project_detail(request, id, format=None):
         serializer = serializers.ProjectSerializer(snippet)
         return Response(serializer.data)
 
-    elif request.method == 'PUT' and request.user.has_perm('asset.assets_change_project_assets'):
+    elif request.method == 'PUT':
+        if not request.user.has_perm('asset.assets_change_project_assets'):
+            return Response(status=status.HTTP_403_FORBIDDEN)
         serializer = serializers.ProjectSerializer(snippet, data=request.data)
         # old_name = snippet.project_name
         if serializer.is_valid():
             serializer.save()
-            # recordAssets.delay(user=str(request.user),content="修改产品线为：{old_name} -> {project_name}".format(old_name=old_name,project_name=request.data.get("project_name")),type="project",id=id)
+            # recordAssets.delay(user=str(request.user),content="修改产品线为：{old_name} -> {project_name}".format(
+            # old_name=old_name,project_name=request.data.get("project_name")),type="project",id=id)
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -69,7 +74,9 @@ def service_list(request, format=None):
         snippets = Service_Assets.objects.all()
         serializer = serializers.ServiceSerializer(snippets, many=True)
         return Response(serializer.data)
-    elif request.method == 'POST' and request.user.has_perm('asset.assets_add_service_assets'):
+    elif request.method == 'POST':
+        if not request.user.has_perm('asset.assets_add_service_assets'):
+            return Response(status=status.HTTP_403_FORBIDDEN)
         del request.data['project_name']
         try:
             service = Service_Assets.objects.create(**request.data)
@@ -100,7 +107,9 @@ def service_detail(request, id, format=None):
         serializer = serializers.ServiceSerializer(snippet)
         return Response(serializer.data)
 
-    elif request.method == 'PUT' and request.user.has_perm('asset.assets_change_service_assets'):
+    elif request.method == 'PUT':
+        if not request.user.has_perm('asset.assets_change_service_assets'):
+            return Response(status=status.HTTP_403_FORBIDDEN)
         serializer = serializers.ServiceSerializer(snippet, data=request.data)
         # old_name = snippet.service_name
         if serializer.is_valid():
@@ -209,11 +218,12 @@ def zone_detail(request, id, format=None):
         return Response(serializer.data)
 
     elif request.method == 'PUT':
-        old_name = snippet.zone_name
+        # old_name = snippet.zone_name
         serializer = serializers.ZoneSerializer(snippet, data=request.data)
         if serializer.is_valid():
             serializer.save()
-            # recordAssets.delay(user=str(request.user),content="修改机房资产：{old_name} -> {zone_name}".format(old_name=old_name,zone_name=request.data.get("zone_name")),type="zone",id=id)
+            # recordAssets.delay(user=str(request.user),content="修改机房资产：{old_name} -> {zone_name}".format(
+            # old_name=old_name,zone_name=request.data.get("zone_name")),type="zone",id=id)
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -260,11 +270,12 @@ def raid_detail(request, id, format=None):
         return Response(serializer.data)
 
     elif request.method == 'PUT':
-        old_name = snippet.raid_name
+        # old_name = snippet.raid_name
         serializer = serializers.RaidSerializer(snippet, data=request.data)
         if serializer.is_valid():
             serializer.save()
-            # recordAssets.delay(user=str(request.user),content="修改Raid类型：{old_name} -> {raid_name}".format(old_name=old_name,raid_name=request.data.get("raid_name")),type="raid",id=id)
+            # recordAssets.delay(user=str(request.user),content="修改Raid类型：{old_name} -> {raid_name}".format(
+            # old_name=old_name,raid_name=request.data.get("raid_name")),type="raid",id=id)
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -272,7 +283,7 @@ def raid_detail(request, id, format=None):
         if not request.user.has_perm('asset.assets_delete_raid_assets'):
             return Response(status=status.HTTP_403_FORBIDDEN)
         snippet.delete()
-        #         #recordAssets.delay(user=str(request.user),content="删除Raid类型：{raid_name}".format(raid_name=snippet.raid_name),type="raid",id=id)
+        # recordAssets.delay(user=str(request.user),content="删除Raid类型：{raid_name}".format(raid_name=snippet.raid_name),type="raid",id=id)
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
@@ -287,9 +298,9 @@ class AssetList(APIView, DataHandle):
         if request.user.is_superuser:
             snippets = Assets.objects.filter(**query_params)
         else:
-            snippets = [ds.assets for ds in User_Server.objects.filter(user=request.user, assets__in=[ds.id for ds in
-                                                                                                      Assets.objects.filter(
-                                                                                                          **query_params)])]
+            snippets = [ds.assets for ds in User_Server.objects.filter(
+                user=request.user, assets__in=[ds.id for ds in Assets.objects.filter(**query_params)])
+                        ]
         dataList = []
         for assets in snippets:
             dataList.append(assets.to_json())
@@ -351,14 +362,15 @@ def asset_server_list(request, format=None):
     elif request.method == 'POST':
         if not request.user.has_perm('asset.assets_add_server'):
             return Response(status=status.HTTP_403_FORBIDDEN)
-        if (request.data.get('data')):
+        if request.data.get('data'):
             data = request.data.get('data')
         else:
             data = request.data
         serializer = serializers.ServerSerializer(data=data)
         if serializer.is_valid():
             serializer.save()
-            # recordAssets.delay(user=str(request.user),content="添加服务器资产：{ip}".format(ip=data.get("ip")),type="server",id=serializer.data.get('id'))
+            # recordAssets.delay(user=str(request.user),content="添加服务器资产：{ip}".format(
+            # ip=data.get("ip")),type="server",id=serializer.data.get('id'))
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -380,11 +392,11 @@ def asset_server_detail(request, id, format=None):
 
     elif request.method == 'PUT':
         '''如果更新字段包含assets则先更新总资产表'''
-        if (request.data.get('data')):
+        if request.data.get('data'):
             data = request.data.get('data')
         else:
             data = request.data
-        if (data.get('assets')):
+        if data.get('assets'):
             assets_data = data.pop('assets')
             try:
                 assets_snippet = Assets.objects.get(id=snippet.assets.id)
@@ -393,13 +405,12 @@ def asset_server_detail(request, id, format=None):
                 return Response(status=status.HTTP_404_NOT_FOUND)
             if assets.is_valid():
                 assets.save()
-            #                 #recordAssets.delay(user=str(request.user),content="修改服务器资产：{ip}".format(ip=snippet.ip),type="server",id=id)
+                # recordAssets.delay(user=str(request.user),content="修改服务器资产：{ip}".format(ip=snippet.ip),type="server",id=id)
         serializer = serializers.ServerSerializer(snippet, data=data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
 
     elif request.method == 'DELETE':
         if not request.user.has_perm('asset.assets_delete_server_assets'):
@@ -425,7 +436,7 @@ def asset_net_list(request, format=None):
         serializer = serializers.NetworkSerializer(snippets, many=True)
         return Response(serializer.data)
     elif request.method == 'POST':
-        if (request.data.get('data')):
+        if request.data.get('data'):
             data = request.data.get('data')
         else:
             data = request.data
@@ -579,10 +590,11 @@ def cabinet_detail(request, id, format=None):
 
     elif request.method == 'PUT':
         serializer = serializers.CabinetSerializer(snippet, data=request.data)
-        old_name = snippet.cabinet_name
+        # old_name = snippet.cabinet_name
         if serializer.is_valid():
             serializer.save()
-            # recordAssets.delay(user=str(request.user),content="修改机柜名称为：{old_name} -> {cabinet_name}".format(old_name=old_name,cabinet_name=request.data.get("cabinet_name")),type="cabinet",id=id)
+            # recordAssets.delay(user=str(request.user),content="修改机柜名称为：{old_name} -> {cabinet_name}".format(
+            # old_name=old_name,cabinet_name=request.data.get("cabinet_name")),type="cabinet",id=id)
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -607,7 +619,8 @@ def line_list(request, format=None):
         serializer = serializers.LineSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
-            # recordAssets.delay(user=str(request.user),content="添加出口线路：{line_name}".format(line_name=request.data.get("line_name")),type="line",id=serializer.data.get('id'))
+            # recordAssets.delay(user=str(request.user),content="添加出口线路：{line_name}".format(
+            # line_name=request.data.get("line_name")),type="line",id=serializer.data.get('id'))
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -629,10 +642,11 @@ def line_detail(request, id, format=None):
 
     elif request.method == 'PUT':
         serializer = serializers.LineSerializer(snippet, data=request.data)
-        old_name = snippet.line_name
+        # old_name = snippet.line_name
         if serializer.is_valid():
             serializer.save()
-            # recordAssets.delay(user=str(request.user),content="修改出口线路类型：{old_name} -> {line_name}".format(old_name=old_name,line_name=request.data.get("line_name")),type="line",id=id)
+            # recordAssets.delay(user=str(request.user),content="修改出口线路类型：{old_name} -> {line_name}".format(
+            # old_name=old_name,line_name=request.data.get("line_name")),type="line",id=id)
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -660,7 +674,8 @@ def tags_list(request, format=None):
         serializer = serializers.TagsSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
-            # recordAssets.delay(user=str(request.user),content="添加用户组：{group_name}".format(group_name=request.data.get("name")),type="group",id=serializer.data.get('id'))
+            # recordAssets.delay(user=str(request.user),content="添加用户组：{group_name}".format(
+            # group_name=request.data.get("name")),type="group",id=serializer.data.get('id'))
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -687,7 +702,8 @@ def tags_detail(request, id, format=None):
         #         old_name = snippet.name
         if serializer.is_valid():
             serializer.save()
-            # recordAssets.delay(user=str(request.user),content="修改用户组名称：{old_name} -> {group_name}".format(old_name=old_name,group_name=request.data.get("name")),type="group",id=id)
+            # recordAssets.delay(user=str(request.user),content="修改用户组名称：{old_name} -> {group_name}".format(
+            # old_name=old_name,group_name=request.data.get("name")),type="group",id=id)
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 

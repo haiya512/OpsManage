@@ -4,6 +4,7 @@ from api.views import (assets_api,deploy_api,db_api,
                        celery_api,cicd_api,monitor_api,
                        nav_api,wiki_api,apscehd_api,
                        ipvs_api)
+app_name = "api"
 urlpatterns = [
             url(r'^assets/$', assets_api.AssetList.as_view()),   
             url(r'^assets/(?P<id>[0-9]+)/$', assets_api.asset_detail),
