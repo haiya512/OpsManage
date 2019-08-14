@@ -45,9 +45,12 @@ class UsersManage(PermsManage,AssetsBase):
             return "参数错误"
         
     def get_user(self,request):
-        if request.method == 'GET':cid = request.GET.get('id')
-        elif request.method == 'POST':cid = request.POST.get('id')
-        elif request.method in ['PUT','DELETE']:cid = QueryDict(request.body).get('id')
+        if request.method == 'GET':
+            cid = request.GET.get('id')
+        elif request.method == 'POST':
+            cid = request.POST.get('id')
+        elif request.method in ['PUT','DELETE']:
+            cid = QueryDict(request.body).get('id')
         try:
             user = User.objects.get(id=cid)
             return user
@@ -59,7 +62,8 @@ class UsersManage(PermsManage,AssetsBase):
         if request.POST.get('password') == request.POST.get('c_password'):
             try:
                 user = User.objects.filter(username=request.POST.get('username'))
-                if len(user)>0:return "注册失败，用户已经存在。"
+                if user>0:
+                    return "注册失败，用户已经存在。"
                 else: 
                     user = User()
                     user.username = request.POST.get('username')

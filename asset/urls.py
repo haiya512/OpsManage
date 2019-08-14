@@ -10,7 +10,7 @@ urlpatterns = [
     url(r'^modf/(?P<id>[0-9]+)/$', views.AssetsModf.as_view()), 
     url(r'^search/$', views.AssetsSearch.as_view()), 
     url(r'^batch/$', views.AssetsBatch.as_view()), 
-    url(r'^server/query/$', views.AssetsServer.as_view()), 
+    url(r'^server/query/$', views.AssetsServer.as_view(), name="server_query"),
     url(r'^tree/$', views.AssetsTree.as_view()), 
     url(r'^import/$', views.AssetsImport.as_view()), 
 ]
