@@ -545,4 +545,4 @@ class FamilySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Family
-        fields = ('fid', 'job', "service_assets")
+        fields = ('id', 'job', "service_assets")

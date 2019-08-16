@@ -18,7 +18,7 @@ class EquipConfig(models.Model):
 
 
 class Family(models.Model):
-    fid = models.IntegerField(primary_key=True, unique=True, verbose_name="家族ID")
+    # fid = models.IntegerField(primary_key=True, unique=True, verbose_name="家族ID")
     job = models.CharField(max_length=20, verbose_name="家族职位")
 
     class Meta:

@@ -27,7 +27,7 @@ def family_list(request, format=None):
 @api_view(['GET', 'PUT', 'DELETE'])
 def family_detail(request, id, format=None):
     try:
-        snippet = Family.objects.get(fid=id)
+        snippet = Family.objects.get(id=id)
     except Family.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
 

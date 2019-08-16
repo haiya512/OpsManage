@@ -6,7 +6,7 @@ function getTagsFamilyList(vIds) {
     var allAssets = requests('get', '/api/family/')
     for (var i = 0; i < allAssets.length; i++) {
         sList.push({
-            "id": allAssets[i]["fid"],
+            "id": allAssets[i]["id"],
             "name": allAssets[i]["job"]
         })
     }
@@ -31,11 +31,11 @@ function getTagsFamilyList(vIds) {
         success: function (response) {
             for (var i = 0; i < response["data"].length; i++) {
                 iList.push({
-                    "id": response["data"][i]["fid"],
+                    "id": response["data"][i]["id"],
                     "name": response["data"][i]["job"]
                 })
                 for (var j = 0; j < sList.length; j++) {
-                    if (sList[j]["fid"] == response["data"][i]["fid"]) {
+                    if (sList[j]["id"] == response["data"][i]["id"]) {
                         sList.splice(j, 1);
                     }
                 }
@@ -219,7 +219,7 @@ $(document).ready(function () {
 
     function makeProjectsTables() {
         var columns = [
-            {"data": "fid"},
+            {"data": "id"},
             {"data": "job"},
         ]
         var columnDefs = [
@@ -227,9 +227,9 @@ $(document).ready(function () {
                 targets: [2],
                 render: function (data, type, row, meta) {
                     return '<div class="btn-group  btn-group-xs">' +
-                        '<button type="button" name="btn-family-modf" value="' + row.fid + '" class="btn btn-default"  aria-label="Justify"><span class="fa fa-edit" aria-hidden="true"></span>' +
+                        '<button type="button" name="btn-family-modf" value="' + row.id + '" class="btn btn-default"  aria-label="Justify"><span class="fa fa-edit" aria-hidden="true"></span>' +
                         '</button>' +
-                        '<button type="button" name="btn-family-confirm" value="' + row.fid + '" class="btn btn-default" aria-label="Justify"><span class="fa fa-trash" aria-hidden="true"></span>' +
+                        '<button type="button" name="btn-family-confirm" value="' + row.id + '" class="btn btn-default" aria-label="Justify"><span class="fa fa-trash" aria-hidden="true"></span>' +
                         '</button>' +
                         '</div>';
                 },
@@ -245,7 +245,7 @@ $(document).ready(function () {
                 var userHtml = '<select required="required" class="form-control" id="project_service_select"  autocomplete="off">'
                 var selectHtml = '';
                 for (var i = 0; i < projectList.length; i++) {
-                    selectHtml += '<option value="' + projectList[i]["fid"] + '">' + projectList[i]["job"] + '</option>'
+                    selectHtml += '<option value="' + projectList[i]["id"] + '">' + projectList[i]["job"] + '</option>'
                 }
                 ;
                 userHtml = userHtml + selectHtml + '</select>';
@@ -290,7 +290,7 @@ $(document).ready(function () {
                             type: "PUT",
                             url: "/api/family/" + vIds + '/',
                             data: {
-                                "fid": vIds,
+                                "id": vIds,
                                 "job": param_name,
                             },
                             error: function (request) {
