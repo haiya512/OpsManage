@@ -93,19 +93,20 @@ mysql>\q
 ```
 六、生成数据表与管理员账户
 ```
-# cd /mnt/OpsManage/
-# /usr/local/python3/bin/python3 manage.py makemigrations wiki
-# /usr/local/python3/bin/python3 manage.py makemigrations orders
-# /usr/local/python3/bin/python3 manage.py makemigrations filemanage
-# /usr/local/python3/bin/python3 manage.py makemigrations navbar
-# /usr/local/python3/bin/python3 manage.py makemigrations databases
-# /usr/local/python3/bin/python3 manage.py makemigrations asset
-# /usr/local/python3/bin/python3 manage.py makemigrations deploy
-# /usr/local/python3/bin/python3 manage.py makemigrations cicd
-# /usr/local/python3/bin/python3 manage.py makemigrations sched
-# /usr/local/python3/bin/python3 manage.py makemigrations apply
-# /usr/local/python3/bin/python3 manage.py migrate
-# /usr/local/python3/bin/python3 manage.py createsuperuser  #创建管理员账户与密码
+cd /mnt/OpsManage/
+python3 manage.py makemigrations wiki
+python3 manage.py makemigrations orders
+python3 manage.py makemigrations filemanage
+python3 manage.py makemigrations navbar
+python3 manage.py makemigrations databases
+python3 manage.py makemigrations asset
+python3 manage.py makemigrations deploy
+python3 manage.py makemigrations cicd
+python3 manage.py makemigrations sched
+python3 manage.py makemigrations apply
+python3 manage.py makemigrations doujiang_guofu
+python3 manage.py migrate
+python3 manage.py createsuperuser  #创建管理员账户与密码
 ```
 ```
 # 如果出现错误ImportError: cannot import name 'LDAPError'

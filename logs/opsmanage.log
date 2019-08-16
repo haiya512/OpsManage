@@ -1,1 +1,1 @@
-﻿
+﻿2019-08-16 17:50:39 [CRITICAL] server.py[line:147] Listen failure: Couldn't listen on 127.0.0.1:8000: [Errno 48] Address already in use.

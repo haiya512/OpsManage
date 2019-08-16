@@ -258,41 +258,23 @@ $(document).ready(function () {
     makeProjectsTables()
 
 
-    //修改项目资产
+    //修改家族职务名称
     $('#projectTableLists tbody').on('click', "button[name='btn-family-modf']", function () {
         var vIds = $(this).val();
         var project = $(this).parent().parent().parent().find("td").eq(1).text();
-        var username = $(this).parent().parent().parent().find("td").eq(2).text();
-        var userList = requests("get", "/api/user/")
-        var userHtml = '<select required="required" class="form-control"  autocomplete="off">'
-        var selectHtml = '';
-        for (var i = 0; i < userList.length; i++) {
-            if (userList[i]["username"] == username) {
-                selectHtml += '<option selected="selected" value="' + userList[i]["id"] + '">' + userList[i]["username"] + '</option>'
-            } else {
-                selectHtml += '<option value="' + userList[i]["id"] + '">' + userList[i]["username"] + '</option>'
-            }
+        //var zone_network = td.eq(5).text()
+        console.log(vIds, project)
 
-        }
-        ;
-        userHtml = userHtml + selectHtml + '</select>';
         $.confirm({
             icon: 'fa fa-edit',
             type: 'blue',
             title: '修改数据',
             content: '<form  data-parsley-validate class="form-horizontal form-label-left">' +
             '<div class="form-group">' +
-            '<label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">项目名称 <span class="required">*</span>' +
+            '<label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">职务名称 <span class="required">*</span>' +
             '</label>' +
             '<div class="col-md-6 col-sm-6 col-xs-12">' +
-            '<input type="text"  name="project_name" value="' + project + '" required="required" class="form-control col-md-7 col-xs-12">' +
-            '</div>' +
-            '</div>' +
-            '<div class="form-group">' +
-            '<label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">项目负责人<span class="required">*</span>' +
-            '</label>' +
-            '<div class="col-md-6 col-sm-6 col-xs-12">' +
-            userHtml +
+            '<input type="text"  name="job" value="' + project + '" required="required" class="form-control col-md-7 col-xs-12">' +
             '</div>' +
             '</div>' +
             '</form>',
@@ -302,15 +284,14 @@ $(document).ready(function () {
                 '修改': {
                     btnClass: 'btn-blue',
                     action: function () {
-                        var param_name = this.$content.find("[name='project_name']").val();
-                        var project_owner = this.$content.find('select option:selected').val();
+                        var param_name = this.$content.find("[name='job']").val();
                         $.ajax({
                             cache: true,
                             type: "PUT",
                             url: "/api/family/" + vIds + '/',
                             data: {
-                                "project_name": param_name,
-                                "project_owner": project_owner
+                                "fid": vIds,
+                                "job": param_name,
                             },
                             error: function (request) {
                                 new PNotify({
@@ -323,7 +304,7 @@ $(document).ready(function () {
                             success: function (data) {
                                 new PNotify({
                                     title: 'Success!',
-                                    text: '资产修改成功',
+                                    text: '职务名称修改成功',
                                     type: 'success',
                                     styling: 'bootstrap3'
                                 });

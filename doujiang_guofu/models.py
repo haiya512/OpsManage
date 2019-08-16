@@ -24,9 +24,9 @@ class Family(models.Model):
     class Meta:
         db_table = 'family_config'
         permissions = (
-            ("doujiang_guofu_read_family", "读取装备信息表权限"),
-            ("doujiang_guofu_change_family", "更改装备信息表权限"),
-            ("doujiang_guofu_add_family", "添加装备信息表权限"),
-            ("doujiang_guofu_delete_family", "删除装备信息表权限"),
+            ("doujiang_guofu_read_family", "读取家族信息表权限"),
+            ("doujiang_guofu_change_family", "更改家族信息表权限"),
+            ("doujiang_guofu_add_family", "添加家族信息表权限"),
+            ("doujiang_guofu_delete_family", "删除家族信息表权限"),
         )
         verbose_name = '家族管理'
