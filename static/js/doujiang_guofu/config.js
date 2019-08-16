@@ -1,6 +1,6 @@
 var userInfo = {}
 
-function getTagsServerList(vIds) {
+function getTagsFamilyList(vIds) {
     var iList = []
     var sList = []
     var allAssets = requests('get', '/api/family/')
@@ -227,9 +227,9 @@ $(document).ready(function () {
                 targets: [2],
                 render: function (data, type, row, meta) {
                     return '<div class="btn-group  btn-group-xs">' +
-                        '<button type="button" name="btn-project-modf" value="' + row.fid + '" class="btn btn-default"  aria-label="Justify"><span class="fa fa-edit" aria-hidden="true"></span>' +
+                        '<button type="button" name="btn-family-modf" value="' + row.fid + '" class="btn btn-default"  aria-label="Justify"><span class="fa fa-edit" aria-hidden="true"></span>' +
                         '</button>' +
-                        '<button type="button" name="btn-project-confirm" value="' + row.fid + '" class="btn btn-default" aria-label="Justify"><span class="fa fa-trash" aria-hidden="true"></span>' +
+                        '<button type="button" name="btn-family-confirm" value="' + row.fid + '" class="btn btn-default" aria-label="Justify"><span class="fa fa-trash" aria-hidden="true"></span>' +
                         '</button>' +
                         '</div>';
                 },
@@ -259,7 +259,7 @@ $(document).ready(function () {
 
 
     //修改项目资产
-    $('#projectTableLists tbody').on('click', "button[name='btn-project-modf']", function () {
+    $('#projectTableLists tbody').on('click', "button[name='btn-family-modf']", function () {
         var vIds = $(this).val();
         var project = $(this).parent().parent().parent().find("td").eq(1).text();
         var username = $(this).parent().parent().parent().find("td").eq(2).text();
@@ -338,7 +338,7 @@ $(document).ready(function () {
 
 
     //删除项目资产
-    $('#projectTableLists tbody').on('click', "button[name='btn-project-confirm']", function () {
+    $('#projectTableLists tbody').on('click', "button[name='btn-family-confirm']", function () {
         var vIds = $(this).val();
         var projectName = $(this).parent().parent().parent().find("td").eq(1).text()
         $.confirm({
@@ -370,8 +370,8 @@ $(document).ready(function () {
         $.ajax({
             cache: true,
             type: "POST",
-            url: "/api/project/",
-            data: $('#projectAssetsform').serialize(),
+            url: "/api/family/",
+            data: $('#familyform').serialize(),
             async: false,
             error: function (request) {
                 new PNotify({
@@ -384,11 +384,11 @@ $(document).ready(function () {
             success: function (data) {
                 new PNotify({
                     title: 'Success!',
-                    text: '资产添加成功',
+                    text: '职务添加成功',
                     type: 'success',
                     styling: 'bootstrap3'
                 });
-                RefreshTable('projectTableLists', '/api/project/');
+                RefreshTable('projectTableLists', '/api/family/');
             }
         });
     });
@@ -418,7 +418,7 @@ $(document).ready(function () {
             className: "btn-xs",
             action: function (e, dt, node, config) {
                 $('#addServiceModal').modal("show");
-                var projectList = requests("get", "/api/project/")
+                var projectList = requests("get", "/api/family/")
                 var userHtml = '<select required="required" class="form-control" id="project_service_select"  autocomplete="off">'
                 var selectHtml = '';
                 for (var i = 0; i < projectList.length; i++) {
@@ -464,50 +464,6 @@ $(document).ready(function () {
             }
         });
     });
-
-    //$('#projectTableLists tbody').on('click', "button[name='btn-service-modf']", function () {
-    //    var vIds = $(this).val();
-    //    var service = $(this).parent().parent().parent().find("td").eq(2).text();
-    //    $.confirm({
-    //        icon: 'fa fa-edit',
-    //        type: 'blue',
-    //        title: '修改数据',
-    //        content: '<div class="form-group"><input type="text" value="' + service + '" placeholder="请输入新的应用名称" class="param_name form-control" /></div>',
-    //        buttons: {
-    //            '取消': function () {
-    //            },
-    //            '修改': {
-    //                btnClass: 'btn-blue',
-    //                action: function () {
-    //                    var param_name = this.$content.find('.param_name').val();
-    //                    $.ajax({
-    //                        cache: true,
-    //                        type: "PUT",
-    //                        url: "/api/family/" + vIds + '/',
-    //                        data: {"service_name": param_name},
-    //                        error: function (request) {
-    //                            new PNotify({
-    //                                title: 'Ops Failed!',
-    //                                text: request.responseText,
-    //                                type: 'error',
-    //                                styling: 'bootstrap3'
-    //                            });
-    //                        },
-    //                        success: function (data) {
-    //                            new PNotify({
-    //                                title: 'Success!',
-    //                                text: '资产修改成功',
-    //                                type: 'success',
-    //                                styling: 'bootstrap3'
-    //                            });
-    //                            RefreshTable('projectTableLists', '/api/family/');
-    //                        }
-    //                    });
-    //                }
-    //            }
-    //        }
-    //    });
-    //});
 
     $('#serviceAssetsTable tbody').on('click', "button[name='btn-service-confirm']", function () {
         var vIds = $(this).val();
@@ -586,7 +542,7 @@ $(document).ready(function () {
         $("#taggroupsubmit").val(vIds)
         $("#myTagsModalLabel").html('<h4 class="modal-title" id="myModalLabel"><code>' + tagsName + '</code>标签分类</h4>')
         $('select[name="doublebox"]').empty();
-        var data = getTagsServerList(vIds)
+        var data = getTagsFamilyList(vIds)
         $('select[name="doublebox"]').doublebox({
             nonSelectedListLabel: '选择主机资产',
             selectedListLabel: '已分配资产',
