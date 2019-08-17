@@ -124,7 +124,7 @@ function modfZone(vIds, zone_name, zone_network, zone_local, zone_contact, zone_
                                 type: 'success',
                                 styling: 'bootstrap3'
                             });
-                            RefreshTable('zoneAssetsTable', '/api/zone/');
+                            RefreshTable('equipmentTable', '/api/zone/');
                         }
                     });
                 }
@@ -217,7 +217,7 @@ $(function () {
 
 $(document).ready(function () {
 
-    function makeProjectsTables() {
+    function makeFamilyTables() {
         var columns = [
             {"data": "id"},
             {"data": "job"},
@@ -252,14 +252,13 @@ $(document).ready(function () {
                 document.getElementById("project_owner").innerHTML = userHtml;
             }
         }]
-        InitDataTable('projectTableLists', "/api/family/", buttons, columns, columnDefs)
+        InitDataTable('FamilyTableLists', "/api/family/", buttons, columns, columnDefs)
     }
 
-    makeProjectsTables()
-
+    makeFamilyTables()
 
     //修改家族职务名称
-    $('#projectTableLists tbody').on('click', "button[name='btn-family-modf']", function () {
+    $('#FamilyTableLists tbody').on('click', "button[name='btn-family-modf']", function () {
         var vIds = $(this).val();
         var project = $(this).parent().parent().parent().find("td").eq(1).text();
         //var zone_network = td.eq(5).text()
@@ -308,7 +307,7 @@ $(document).ready(function () {
                                     type: 'success',
                                     styling: 'bootstrap3'
                                 });
-                                RefreshTable('projectTableLists', '/api/family/');
+                                RefreshTable('FamilyTableLists', '/api/family/');
                             }
                         });
                     }
@@ -317,9 +316,8 @@ $(document).ready(function () {
         });
     });
 
-
-    //删除项目资产
-    $('#projectTableLists tbody').on('click', "button[name='btn-family-confirm']", function () {
+    //删除家族职务名称
+    $('#FamilyTableLists tbody').on('click', "button[name='btn-family-confirm']", function () {
         var vIds = $(this).val();
         var projectName = $(this).parent().parent().parent().find("td").eq(1).text()
         $.confirm({
@@ -346,8 +344,8 @@ $(document).ready(function () {
         });
     });
 
-    //添加项目资产
-    $('#projectsubmit').on('click', function () {
+    //添加家族职务分类
+    $('#familysubmit').on('click', function () {
         $.ajax({
             cache: true,
             type: "POST",
@@ -369,7 +367,7 @@ $(document).ready(function () {
                     type: 'success',
                     styling: 'bootstrap3'
                 });
-                RefreshTable('projectTableLists', '/api/family/');
+                RefreshTable('FamilyTableLists', '/api/family/');
             }
         });
     });
@@ -1169,12 +1167,12 @@ $(document).ready(function () {
                 $('#addZoneModal').modal("show");
             }
         }]
-        InitDataTable('zoneAssetsTable', "/api/zone/", buttons, columns, columnDefs)
+        InitDataTable('equipmentTable', "/api/zone/", buttons, columns, columnDefs)
     }
 
     makeZoneTables()
     //修改应用资产
-    $('#zoneAssetsTable tbody').on('click', "button[name='btn-zone-modf']", function () {
+    $('#equipmentTable tbody').on('click', "button[name='btn-zone-modf']", function () {
         var vIds = $(this).val();
         var td = $(this).parent().parent().parent().find("td")
         var zone_name = td.eq(1).text()
@@ -1217,14 +1215,14 @@ $(document).ready(function () {
                     type: 'success',
                     styling: 'bootstrap3'
                 });
-                RefreshTable('zoneAssetsTable', '/api/zone/');
+                RefreshTable('equipmentTable', '/api/zone/');
             }
         });
     });
 
 
     //删除机房资产
-    $('#zoneAssetsTable tbody').on('click', "button[name='btn-zone-confirm']", function () {
+    $('#equipmentTable tbody').on('click', "button[name='btn-zone-confirm']", function () {
         var vIds = $(this).val();
         var zoneName = $(this).parent().parent().parent().find("td").eq(1).text()
         $.confirm({
@@ -1243,7 +1241,7 @@ $(document).ready(function () {
                                 type: 'success',
                                 styling: 'bootstrap3'
                             });
-                            RefreshTable('zoneAssetsTable', '/api/zone/');
+                            RefreshTable('equipmentTable', '/api/zone/');
                         },
                         error: function (response) {
                             new PNotify({

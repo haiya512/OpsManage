@@ -63,7 +63,7 @@
                                             <div class="clearfix"></div>
                                         </div>
                                         <div class="x_content">
-                                            <table class="table" id="projectTableLists">
+                                            <table class="table" id="FamilyTableLists">
                                                 <thead>
                                                 <tr>
                                                     <th>ID</th>
@@ -84,9 +84,7 @@
                                 <div class="col-md-12 col-sm-6 col-xs-12">
                                     <div class="x_panel">
                                         <div class="x_title">
-                                            <h2>机房信息
-                                                <small>Zone</small>
-                                            </h2>
+                                            <h2>装备信息</h2>
                                             <ul class="nav navbar-right panel_toolbox">
                                                 <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                                                 </li>
@@ -106,15 +104,12 @@
                                             <div class="clearfix"></div>
                                         </div>
                                         <div class="x_content">
-                                            <table class="table" id="zoneAssetsTable">
+                                            <table class="table" id="equipmentTable">
                                                 <thead>
                                                 <tr>
                                                     <th>ID</th>
-                                                    <th>机房名称</th>
-                                                    <th>机房负责人</th>
-                                                    <th>机房地址</th>
-                                                    <th>联系方式</th>
-                                                    <th>网段</th>
+                                                    <th>装备名称</th>
+                                                    <th>品级</th>
                                                     <th class="text-center">操作</th>
                                                 </tr>
                                                 </thead>
@@ -162,7 +157,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button type="button" id="projectsubmit" class="btn btn-primary">保存</button>
+                    <button type="button" id="familysubmit" class="btn btn-primary">保存</button>
                 </div>
 
             </div>
@@ -176,12 +171,12 @@
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
                     </button>
-                    <h4 class="modal-title">添加机房信息</h4>
+                    <h4 class="modal-title">添加装备</h4>
                 </div>
                 <div class="modal-body">
                     <form class="form-horizontal" role="form" id="zoneAssetsform">
                         <div class="form-group">
-                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">机房名称<span
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">装备名称<span
                                     class="required">*</span>
                             </label>
 
@@ -189,26 +184,9 @@
                                 <input class="form-control" type="text" id="zone_name"/>
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">机房网段<span
-                                    class="required">*</span>
-                            </label>
 
-                            <div class="col-md-6 col-sm-6 col-xs-12">
-                                <input class="form-control" type="text" id="zone_network"/>
-                            </div>
-                        </div>
                         <div class="form-group">
-                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">机房位置<span
-                                    class="required">*</span>
-                            </label>
-
-                            <div class="col-md-6 col-sm-6 col-xs-12">
-                                <input class="form-control" type="text" id="zone_local"/>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">机房联系人<span
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">装备等级<span
                                     class="required">*</span>
                             </label>
 
@@ -216,15 +194,7 @@
                                 <input class="form-control" type="text" id="zone_contact"/>
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">联系人号码<span
-                                    class="required">*</span>
-                            </label>
 
-                            <div class="col-md-6 col-sm-6 col-xs-12">
-                                <input class="form-control" type="text" id="zone_number"/>
-                            </div>
-                        </div>
                     </form>
                 </div>
                 <div class="modal-footer">

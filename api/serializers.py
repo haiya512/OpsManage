@@ -541,8 +541,16 @@ class IPVSNanmeServerSerializer(serializers.ModelSerializer):
 
 
 class FamilySerializer(serializers.ModelSerializer):
-    service_assets = ServiceSerializer(many=True, read_only=True, required=False)
+    family_config = ServiceSerializer(many=True, read_only=True, required=False)
 
     class Meta:
         model = Family
-        fields = ('id', 'job', "service_assets")
+        fields = ('id', 'job', "family_config")
+
+
+class EquipmentSerializer(serializers.ModelSerializer):
+    equip_config = ServiceSerializer(many=True, read_only=True, required=False)
+
+    class Meta:
+        model = Family
+        fields = ('equid', 'name', "qu", "equip_config")
