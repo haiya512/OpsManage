@@ -164,7 +164,7 @@
         </div>
     </div>
 
-    <div id="addZoneModal" class="modal fade bs-example-modal-zone" tabindex="-1" role="dialog" aria-hidden="true">
+    <div id="addEquipModal" class="modal fade bs-example-modal-zone" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
 
@@ -174,14 +174,23 @@
                     <h4 class="modal-title">添加装备</h4>
                 </div>
                 <div class="modal-body">
-                    <form class="form-horizontal" role="form" id="zoneAssetsform">
+                    <form class="form-horizontal" role="form" id="equipmentform">
+                        <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">装备ID<span
+                                    class="required">*</span>
+                            </label>
+
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                <input class="form-control" type="text" name="equid"/>
+                            </div>
+                        </div>
                         <div class="form-group">
                             <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">装备名称<span
                                     class="required">*</span>
                             </label>
 
                             <div class="col-md-6 col-sm-6 col-xs-12">
-                                <input class="form-control" type="text" id="zone_name"/>
+                                <input class="form-control" type="text" name="name"/>
                             </div>
                         </div>
 
@@ -191,7 +200,7 @@
                             </label>
 
                             <div class="col-md-6 col-sm-6 col-xs-12">
-                                <input class="form-control" type="text" id="zone_contact"/>
+                                <input class="form-control" type="text" name="qu"/>
                             </div>
                         </div>
 
@@ -199,7 +208,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button type="button" id="zonesubmit" class="btn btn-primary">保存</button>
+                    <button type="button" id="equipsubmit" class="btn btn-primary">保存</button>
                 </div>
 
             </div>

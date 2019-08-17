@@ -11,7 +11,7 @@ from navbar.models import *
 from wiki.models import *
 from orders.models import *
 from apply.models import *
-from doujiang_guofu.models import Family
+from doujiang_guofu.models import Family, EquipConfig
 from django.contrib.auth.models import Group, User
 from django_celery_beat.models import CrontabSchedule, IntervalSchedule, PeriodicTask
 from rest_framework.pagination import CursorPagination
@@ -552,5 +552,5 @@ class EquipmentSerializer(serializers.ModelSerializer):
     equip_config = ServiceSerializer(many=True, read_only=True, required=False)
 
     class Meta:
-        model = Family
+        model = EquipConfig
         fields = ('equid', 'name', "qu", "equip_config")

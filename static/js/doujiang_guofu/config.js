@@ -45,7 +45,7 @@ function getTagsFamilyList(vIds) {
     return {"tags": iList, "all": sList}
 }
 
-function modfZone(vIds, zone_name, zone_network, zone_local, zone_contact, zone_number) {
+function modfEquipment(vIds, zone_name, zone_network, zone_local, zone_contact, zone_number) {
     $.confirm({
         icon: 'fa fa-edit',
         type: 'blue',
@@ -372,636 +372,21 @@ $(document).ready(function () {
         });
     });
 
-    function makeServiceTables() {
+    function makeEquipmentTables() {
         var columns = [
-            {"data": "id"},
-            {"data": "project_name"},
-            {"data": "service_name"},
-        ]
-        var columnDefs = [
-            {
-                targets: [3],
-                render: function (data, type, row, meta) {
-                    return '<div class="btn-group  btn-group-xs">' +
-                        '<button type="button" name="btn-service-modf" value="' + row.id + '" class="btn btn-default"  aria-label="Justify"><span class="fa fa-edit" aria-hidden="true"></span>' +
-                        '</button>' +
-                        '<button type="button" name="btn-service-confirm" value="' + row.id + '" class="btn btn-default" aria-label="Justify"><span class="fa fa-trash" aria-hidden="true"></span>' +
-                        '</button>' +
-                        '</div>';
-                },
-                "className": "text-center",
-            },
-        ]
-        var buttons = [{
-            text: '<span class="fa fa-plus"></span>',
-            className: "btn-xs",
-            action: function (e, dt, node, config) {
-                $('#addServiceModal').modal("show");
-                var projectList = requests("get", "/api/family/")
-                var userHtml = '<select required="required" class="form-control" id="project_service_select"  autocomplete="off">'
-                var selectHtml = '';
-                for (var i = 0; i < projectList.length; i++) {
-                    selectHtml += '<option value="' + projectList[i]["id"] + '">' + projectList[i]["project_name"] + '</option>'
-                }
-                ;
-                userHtml = userHtml + selectHtml + '</select>';
-                document.getElementById("project_service_select").innerHTML = userHtml;
-            }
-        }]
-        InitDataTable('serviceAssetsTable', "/api/service/", buttons, columns, columnDefs)
-    }
-
-    $('#servicesubmit').on('click', function () {
-        $.ajax({
-            cache: true,
-            type: "POST",
-            url: "/api/service/",
-            contentType: "application/json",
-            dataType: "json",
-            data: JSON.stringify({
-                "project_id": $('#project_service_select option:selected').val(),
-                "project_name": $('#project_service_select option:selected').text(),
-                "service_name": $('#service_name').val()
-            }),
-            async: false,
-            error: function (request) {
-                new PNotify({
-                    title: 'Ops Failed!',
-                    text: request.responseText,
-                    type: 'error',
-                    styling: 'bootstrap3'
-                });
-            },
-            success: function (data) {
-                new PNotify({
-                    title: 'Success!',
-                    text: '资产添加成功',
-                    type: 'success',
-                    styling: 'bootstrap3'
-                });
-                RefreshTable('serviceAssetsTable', '/api/service/');
-            }
-        });
-    });
-
-    $('#serviceAssetsTable tbody').on('click', "button[name='btn-service-confirm']", function () {
-        var vIds = $(this).val();
-        var service = $(this).parent().parent().parent().find("td").eq(2).text();
-        $.confirm({
-            title: '删除确认?',
-            type: 'red',
-            content: "删除应用: <code>" + service + '</code>',
-            buttons: {
-                确认: function () {
-                    $.ajax({
-                        type: 'DELETE',
-                        url: '/api/service/' + vIds + '/',
-                        success: function (response) {
-                            new PNotify({
-                                title: 'Success!',
-                                text: '资产删除成功',
-                                type: 'success',
-                                styling: 'bootstrap3'
-                            });
-                            RefreshTable('serviceAssetsTable', '/api/service/');
-                        },
-                        error: function (response) {
-                            new PNotify({
-                                title: 'Ops Failed!',
-                                text: request.responseText,
-                                type: 'error',
-                                styling: 'bootstrap3'
-                            });
-                        }
-                    });
-                },
-                取消: function () {
-                    return true;
-                },
-            }
-        });
-    });
-
-    makeServiceTables()
-
-    function makeTagsTables() {
-        var columns = [
-            {"data": "id"},
-            {"data": "tags_name"},
-        ]
-        var columnDefs = [
-            {
-                targets: [2],
-                render: function (data, type, row, meta) {
-                    return '<div class="btn-group  btn-group-xs">' +
-                        '<button type="button" name="btn-tags-modf" value="' + row.id + '" class="btn btn-default"  aria-label="Justify"><span class="fa fa-edit" aria-hidden="true"></span>' +
-                        '</button>' +
-                        '<button type="button" name="btn-tags-group" value="' + row.id + '" class="btn btn-default" data-toggle="modal" data-target=".bs-example-modal-tags-info"><span class="fa fa-group" aria-hidden="true"></span>' +
-                        '</button>' +
-                        '<button type="button" name="btn-tags-confirm" value="' + row.id + '" class="btn btn-default" aria-label="Justify"><span class="fa fa-trash" aria-hidden="true"></span>' +
-                        '</button>' +
-                        '</div>';
-                },
-                "className": "text-center",
-            },
-        ]
-        var buttons = [{
-            text: '<span class="fa fa-plus"></span>',
-            className: "btn-xs",
-            action: function (e, dt, node, config) {
-                $('#addTagsModal').modal("show");
-            }
-        }]
-        InitDataTable('tagsAssetsTable', "/api/tags/", buttons, columns, columnDefs)
-    }
-
-    $('#tagsAssetsTable tbody').on('click', "button[name='btn-tags-group']", function () {
-        var vIds = $(this).val();
-        var tagsName = $(this).parent().parent().parent().find("td").eq(1).text();
-        $("#taggroupsubmit").val(vIds)
-        $("#myTagsModalLabel").html('<h4 class="modal-title" id="myModalLabel"><code>' + tagsName + '</code>标签分类</h4>')
-        $('select[name="doublebox"]').empty();
-        var data = getTagsFamilyList(vIds)
-        $('select[name="doublebox"]').doublebox({
-            nonSelectedListLabel: '选择主机资产',
-            selectedListLabel: '已分配资产',
-            preserveSelectionOnMove: 'moved',
-            moveOnSelect: false,
-            nonSelectedList: data["all"],
-            selectedList: data["tags"],
-            optionValue: "id",
-            optionText: "name",
-            doubleMove: true,
-        });
-
-    });
-
-    $("#taggroupsubmit").on('click', function () {
-        var vIds = $(this).val();
-        var vServer = $('[name="doublebox"]').val()
-        if (vServer) {
-            $.ajax({
-                cache: true,
-                type: "POST",
-                contentType: "application/json",
-                dataType: "json",
-                url: "/api/tags/assets/" + vIds + '/',
-                data: JSON.stringify({
-                    "ids": vServer
-                }),
-                async: false,
-                error: function (request) {
-                    new PNotify({
-                        title: 'Ops Failed!',
-                        text: request.responseText,
-                        type: 'error',
-                        styling: 'bootstrap3'
-                    });
-                },
-                success: function (data) {
-                    new PNotify({
-                        title: 'Success!',
-                        text: '添加成功',
-                        type: 'success',
-                        styling: 'bootstrap3'
-                    });
-                }
-            });
-        } else {
-            $.confirm({
-                title: '<strong>警告</strong>',
-                typeAnimated: true,
-                content: "没有选择任何资产~",
-                type: 'red'
-            });
-        }
-
-    });
-
-    //修改使用组资产
-    $('#tagsAssetsTable tbody').on('click', "button[name='btn-tags-modf']", function () {
-        var vIds = $(this).val();
-        var tagsName = $(this).parent().parent().parent().find("td").eq(1).text();
-        $.confirm({
-            icon: 'fa fa-edit',
-            type: 'blue',
-            title: '修改数据',
-            content: '<div class="form-group"><input type="text" value="' + tagsName + '" placeholder="请输入新的名称" class="param_name form-control" /></div>',
-            buttons: {
-                '取消': function () {
-                },
-                '修改': {
-                    btnClass: 'btn-blue',
-                    action: function () {
-                        var param_name = this.$content.find('.param_name').val();
-                        $.ajax({
-                            cache: true,
-                            type: "PUT",
-                            url: "/api/tags/" + vIds + '/',
-                            data: {"tags_name": param_name},
-                            error: function (response) {
-                                new PNotify({
-                                    title: 'Ops Failed!',
-                                    text: response.responseText,
-                                    type: 'error',
-                                    styling: 'bootstrap3'
-                                });
-                            },
-                            success: function (data) {
-                                new PNotify({
-                                    title: 'Success!',
-                                    text: '资产修改成功',
-                                    type: 'success',
-                                    styling: 'bootstrap3'
-                                });
-                                RefreshTable('tagsAssetsTable', '/api/tags/');
-                            }
-                        });
-                    }
-                }
-            }
-        });
-    });
-
-    //删除Tags资产
-    $('#tagsAssetsTable tbody').on('click', "button[name='btn-tags-confirm']", function () {
-        var vIds = $(this).val();
-        var tagsName = $(this).parent().parent().parent().find("td").eq(1).text();
-        $.confirm({
-            title: '删除确认?',
-            type: 'red',
-            content: "删除标签: 【" + tagsName + '】',
-            buttons: {
-                确认: function () {
-                    $.ajax({
-                        type: 'DELETE',
-                        url: '/api/tags/' + vIds + '/',
-                        success: function (response) {
-                            new PNotify({
-                                title: 'Success!',
-                                text: '资产删除成功',
-                                type: 'success',
-                                styling: 'bootstrap3'
-                            });
-                            RefreshTable('tagsAssetsTable', '/api/tags/');
-                        },
-                        error: function (response) {
-                            new PNotify({
-                                title: 'Ops Failed!',
-                                text: response.responseText,
-                                type: 'error',
-                                styling: 'bootstrap3'
-                            });
-                        }
-                    });
-                },
-                取消: function () {
-                    return true;
-                },
-            }
-        });
-    });
-
-    $('#tagssubmit').on('click', function () {
-        $.ajax({
-            cache: true,
-            type: "POST",
-            url: "/api/tags/",
-            contentType: "application/json",
-            dataType: "json",
-            data: JSON.stringify({
-                "tags_name": $('#tag_name').val(),
-            }),
-            async: false,
-            error: function (request) {
-                new PNotify({
-                    title: 'Ops Failed!',
-                    text: request.responseText,
-                    type: 'error',
-                    styling: 'bootstrap3'
-                });
-            },
-            success: function (data) {
-                new PNotify({
-                    title: 'Success!',
-                    text: '资产添加成功',
-                    type: 'success',
-                    styling: 'bootstrap3'
-                });
-                RefreshTable('tagsAssetsTable', '/api/tags/');
-            }
-        });
-    });
-
-    makeTagsTables()
-
-
-    function makeCabinetTables() {
-        var columns = [
-            {"data": "id"},
-            {"data": "zone_name"},
-            {"data": "cabinet_name"},
-        ]
-        var columnDefs = [
-            {
-                targets: [3],
-                render: function (data, type, row, meta) {
-                    return '<div class="btn-group  btn-group-xs">' +
-                        '<button type="button" name="btn-cabinet-modf" value="' + row.id + '" class="btn btn-default"  aria-label="Justify"><span class="fa fa-edit" aria-hidden="true"></span>' +
-                        '</button>' +
-                        '<button type="button" name="btn-cabinet-confirm" value="' + row.id + '" class="btn btn-default" aria-label="Justify"><span class="fa fa-trash" aria-hidden="true"></span>' +
-                        '</button>' +
-                        '</div>';
-                },
-                "className": "text-center",
-            },
-        ]
-        var buttons = [{
-            text: '<span class="fa fa-plus"></span>',
-            className: "btn-xs",
-            action: function (e, dt, node, config) {
-                $('#addCabinetModal').modal("show");
-            }
-        }]
-        InitDataTable('cabinetAssetsTable', "/api/cabinet/", buttons, columns, columnDefs)
-    }
-
-
-    $('#cabinetsubmit').on('click', function () {
-        $.ajax({
-            cache: true,
-            type: "POST",
-            url: "/api/cabinet/",
-            contentType: "application/json",
-            dataType: "json",
-            data: JSON.stringify({
-                "zone_id": $('#zone_cabinet_select option:selected').val(),
-                "zone_name": $('#zone_cabinet_select option:selected').text(),
-                "cabinet_name": $('#cabinet_name').val()
-            }),
-            async: false,
-            error: function (response) {
-                new PNotify({
-                    title: 'Ops Failed!',
-                    text: response.responseText,
-                    type: 'error',
-                    styling: 'bootstrap3'
-                });
-            },
-            success: function (data) {
-                new PNotify({
-                    title: 'Success!',
-                    text: '资产添加成功',
-                    type: 'success',
-                    styling: 'bootstrap3'
-                });
-                RefreshTable('cabinetAssetsTable', '/api/cabinet/');
-            }
-        });
-    });
-
-    $('#cabinetAssetsTable tbody').on('click', "button[name='btn-cabinet-modf']", function () {
-        var vIds = $(this).val();
-        var cabinetName = $(this).parent().parent().parent().find("td").eq(2).text();
-        $.confirm({
-            icon: 'fa fa-edit',
-            type: 'blue',
-            title: '修改数据',
-            content: '<div class="form-group"><input type="text" value="' + cabinetName + '" placeholder="请输入新的应用名称" class="param_name form-control" /></div>',
-            buttons: {
-                '取消': function () {
-                },
-                '修改': {
-                    btnClass: 'btn-blue',
-                    action: function () {
-                        var param_name = this.$content.find('.param_name').val();
-                        $.ajax({
-                            cache: true,
-                            type: "PUT",
-                            url: "/api/cabinet/" + vIds + '/',
-                            data: {"cabinet_name": param_name},
-                            error: function (response) {
-                                new PNotify({
-                                    title: 'Ops Failed!',
-                                    text: response.responseText,
-                                    type: 'error',
-                                    styling: 'bootstrap3'
-                                });
-                            },
-                            success: function (data) {
-                                new PNotify({
-                                    title: 'Success!',
-                                    text: '资产修改成功',
-                                    type: 'success',
-                                    styling: 'bootstrap3'
-                                });
-                                RefreshTable('cabinetAssetsTable', '/api/cabinet/');
-                            }
-                        });
-                    }
-                }
-            }
-        });
-    });
-
-    //删除机柜资产
-    $('#cabinetAssetsTable tbody').on('click', "button[name='btn-cabinet-confirm']", function () {
-        var vIds = $(this).val();
-        var cabinetName = $(this).parent().parent().parent().find("td").eq(2).text();
-        $.confirm({
-            title: '删除确认?',
-            type: 'red',
-            content: "删除机柜: " + cabinetName,
-            buttons: {
-                确认: function () {
-                    $.ajax({
-                        type: 'DELETE',
-                        url: '/api/cabinet/' + vIds + '/',
-                        success: function (response) {
-                            new PNotify({
-                                title: 'Success!',
-                                text: '资产删除成功',
-                                type: 'success',
-                                styling: 'bootstrap3'
-                            });
-                            RefreshTable('cabinetAssetsTable', '/api/cabinet/');
-                        },
-                        error: function (response) {
-                            new PNotify({
-                                title: 'Ops Failed!',
-                                text: response.responseText,
-                                type: 'error',
-                                styling: 'bootstrap3'
-                            });
-                        }
-                    });
-                },
-                取消: function () {
-                    return true;
-                },
-            }
-        });
-    });
-
-    makeCabinetTables()
-
-    function makeLineTables() {
-        var columns = [
-            {"data": "id"},
-            {"data": "line_name"},
-        ]
-        var columnDefs = [
-            {
-                targets: [2],
-                render: function (data, type, row, meta) {
-                    return '<div class="btn-group  btn-group-xs">' +
-                        '<button type="button" name="btn-line-modf" value="' + row.id + '" class="btn btn-default"  aria-label="Justify"><span class="fa fa-edit" aria-hidden="true"></span>' +
-                        '</button>' +
-                        '<button type="button" name="btn-line-confirm" value="' + row.id + '" class="btn btn-default" aria-label="Justify"><span class="fa fa-trash" aria-hidden="true"></span>' +
-                        '</button>' +
-                        '</div>';
-                },
-                "className": "text-center",
-            },
-        ]
-        var buttons = [{
-            text: '<span class="fa fa-plus"></span>',
-            className: "btn-xs",
-            action: function (e, dt, node, config) {
-                $('#addLineModal').modal("show");
-            }
-        }]
-        InitDataTable('lineAssetsTable', "/api/line/", buttons, columns, columnDefs)
-    }
-
-    $('#lineAssetsTable tbody').on('click', "button[name='btn-line-modf']", function () {
-        var vIds = $(this).val();
-        var lineName = $(this).parent().parent().parent().find("td").eq(1).text();
-        $.confirm({
-            icon: 'fa fa-edit',
-            type: 'blue',
-            title: '修改数据',
-            content: '<div class="form-group"><input type="text" VALUE="' + lineName + '" placeholder="请输入新的出口线路" class="param_name form-control" /></div>',
-            buttons: {
-                '取消': function () {
-                },
-                '修改': {
-                    btnClass: 'btn-blue',
-                    action: function () {
-                        var param_name = this.$content.find('.param_name').val();
-                        $.ajax({
-                            cache: true,
-                            type: "PUT",
-                            url: "/api/line/" + vIds + '/',
-                            data: {"line_name": param_name},
-                            error: function (response) {
-                                new PNotify({
-                                    title: 'Ops Failed!',
-                                    text: response.responseText,
-                                    type: 'error',
-                                    styling: 'bootstrap3'
-                                });
-                            },
-                            success: function (data) {
-                                new PNotify({
-                                    title: 'Success!',
-                                    text: '资产修改成功',
-                                    type: 'success',
-                                    styling: 'bootstrap3'
-                                });
-                                RefreshTable('lineAssetsTable', '/api/line/');
-                            }
-                        });
-                    }
-                }
-            }
-        });
-    });
-
-    $('#lineAssetsTable tbody').on('click', "button[name='btn-line-confirm']", function () {
-        var vIds = $(this).val();
-        var lineName = $(this).parent().parent().parent().find("td").eq(1).text();
-        $.confirm({
-            title: '删除确认?',
-            type: 'red',
-            content: "删除项目: " + lineName,
-            buttons: {
-                确认: function () {
-                    $.ajax({
-                        type: 'DELETE',
-                        url: '/api/line/' + vIds + '/',
-                        success: function (response) {
-                            new PNotify({
-                                title: 'Success!',
-                                text: '资产删除成功',
-                                type: 'success',
-                                styling: 'bootstrap3'
-                            });
-                            RefreshTable('lineAssetsTable', '/api/line/');
-                        },
-                        error: function (response) {
-                            new PNotify({
-                                title: 'Ops Failed!',
-                                text: response.responseText,
-                                type: 'error',
-                                styling: 'bootstrap3'
-                            });
-                        }
-                    });
-                },
-                取消: function () {
-                    return true;
-                },
-            }
-        });
-    });
-
-    $('#linesubmit').on('click', function () {
-        $.ajax({
-            cache: true,
-            type: "POST",
-            url: "/api/line/",
-            contentType: "application/json",
-            dataType: "json",
-            data: JSON.stringify({
-                "line_name": $('#line_name').val()
-            }),
-            async: false,
-            error: function (request) {
-                new PNotify({
-                    title: 'Ops Failed!',
-                    text: request.responseText,
-                    type: 'error',
-                    styling: 'bootstrap3'
-                });
-            },
-            success: function (data) {
-                new PNotify({
-                    title: 'Success!',
-                    text: '资产添加成功',
-                    type: 'success',
-                    styling: 'bootstrap3'
-                });
-                RefreshTable('lineAssetsTable', '/api/line/');
-            }
-        });
-    });
-
-    makeLineTables()
-
-    function makeGroupTables() {
-        var columns = [
-            {"data": "id"},
+            {"data": "equid"},
             {"data": "name"},
+            {"data": "qu"},
         ]
         var columnDefs = [
             {
-                targets: [2],
+                targets: [3],
                 render: function (data, type, row, meta) {
                     return '<div class="btn-group  btn-group-xs">' +
-                        '<button type="button" name="btn-group-modf" value="' + row.id + '" class="btn btn-default"  aria-label="Justify"><span class="fa fa-edit" aria-hidden="true"></span>' +
+                        '<button type="button" name="btn-equip-modf" value="' + row.equid + '" class="btn btn-default"  aria-label="Justify"><span class="fa fa-edit" aria-hidden="true"></span>' +
                         '</button>' +
-                        '<button type="button" name="btn-group-confirm" value="' + row.id + '" class="btn btn-default" aria-label="Justify"><span class="fa fa-trash" aria-hidden="true"></span>' +
+                        '</button>' +
+                        '<button type="button" name="btn-equip-confirm" value="' + row.equid + '" class="btn btn-default" aria-label="Justify"><span class="fa fa-trash" aria-hidden="true"></span>' +
                         '</button>' +
                         '</div>';
                 },
@@ -1012,37 +397,67 @@ $(document).ready(function () {
             text: '<span class="fa fa-plus"></span>',
             className: "btn-xs",
             action: function (e, dt, node, config) {
-                $('#addGroupModal').modal("show");
+                $('#addEquipModal').modal("show");
             }
         }]
-        InitDataTable('groupAssetsTable', "/api/group/", buttons, columns, columnDefs)
+        InitDataTable('equipmentTable', "/api/equipment/", buttons, columns, columnDefs)
     }
 
-    //修改使用组资产
-    $('#groupAssetsTable tbody').on('click', "button[name='btn-group-modf']", function () {
+    //修改装备信息
+    $('#equipmentTable tbody').on('click', "button[name='btn-equip-modf']", function () {
         var vIds = $(this).val();
-        var groupName = $(this).parent().parent().parent().find("td").eq(1).text();
+        var equip_name = $(this).parent().parent().parent().find("td").eq(1).text();
+        var equip_qu = $(this).parent().parent().parent().find("td").eq(2).text();
+        //modfZone(vIds, equip_name, equip_qu)
         $.confirm({
             icon: 'fa fa-edit',
             type: 'blue',
             title: '修改数据',
-            content: '<div class="form-group"><input type="text" value="' + groupName + '" placeholder="请输入新的名称" class="param_name form-control" /></div>',
+            content: '<form  data-parsley-validate class="form-horizontal form-label-left">' +
+                '<div class="form-group">' +
+                '<label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">机房名称<span class="required">*</span>' +
+                '</label>' +
+                '<div class="col-md-6 col-sm-6 col-xs-12">' +
+                '<input type="text"  name="modf_equip_id" value="' + vIds + '" required="required" class="form-control col-md-7 col-xs-12">' +
+                '</div>' +
+                '</div>' +
+                '<div class="form-group">' +
+                '<label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">机房名称<span class="required">*</span>' +
+                '</label>' +
+                '<div class="col-md-6 col-sm-6 col-xs-12">' +
+                '<input type="text"  name="modf_equip_name" value="' + equip_name + '" required="required" class="form-control col-md-7 col-xs-12">' +
+                '</div>' +
+                '</div>' +
+                '<div class="form-group">' +
+                '<label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">机房联系人<span class="required">*</span>' +
+                '</label>' +
+                '<div class="col-md-6 col-sm-6 col-xs-12">' +
+                '<input type="text" name="modf_equip_qu" value="' + equip_qu + '"  required="required" placeholder="" class="form-control col-md-7 col-xs-12">' +
+                '</div>' +
+                '</div>' +
+                '</form>',
             buttons: {
                 '取消': function () {
                 },
                 '修改': {
                     btnClass: 'btn-blue',
                     action: function () {
-                        var param_name = this.$content.find('.param_name').val();
+                        var vIds_ = this.$content.find("[name='modf_equip_id']").val();
+                        var equip_name = this.$content.find("[name='modf_equip_name']").val();
+                        var equip_qu = this.$content.find("[name='modf_equip_qu']").val();
                         $.ajax({
                             cache: true,
                             type: "PUT",
-                            url: "/api/group/" + vIds + '/',
-                            data: {"name": param_name},
-                            error: function (response) {
+                            url: "/api/equipment/" + vIds + '/',
+                            data: {
+                                "equid": vIds_,
+                                "name": equip_name,
+                                "qu": equip_qu,
+                            },
+                            error: function (request) {
                                 new PNotify({
                                     title: 'Ops Failed!',
-                                    text: response.responseText,
+                                    text: request.responseText,
                                     type: 'error',
                                     styling: 'bootstrap3'
                                 });
@@ -1050,11 +465,11 @@ $(document).ready(function () {
                             success: function (data) {
                                 new PNotify({
                                     title: 'Success!',
-                                    text: '资产修改成功',
+                                    text: '修改成功',
                                     type: 'success',
                                     styling: 'bootstrap3'
                                 });
-                                RefreshTable('groupAssetsTable', '/api/group/');
+                                RefreshTable('equipmentTable', '/api/equipment/');
                             }
                         });
                     }
@@ -1063,19 +478,19 @@ $(document).ready(function () {
         });
     });
 
-    //删除Group资产
-    $('#groupAssetsTable tbody').on('click', "button[name='btn-group-confirm']", function () {
+    //删除装备
+    $('#equipmentTable tbody').on('click', "button[name='btn-equip-confirm']", function () {
         var vIds = $(this).val();
-        var groupName = $(this).parent().parent().parent().find("td").eq(1).text();
+        var equipName = $(this).parent().parent().parent().find("td").eq(1).text();
         $.confirm({
             title: '删除确认?',
             type: 'red',
-            content: "删除使用组: " + groupName,
+            content: "删除装备: 【" + equipName + '】',
             buttons: {
                 确认: function () {
                     $.ajax({
                         type: 'DELETE',
-                        url: '/api/group/' + vIds + '/',
+                        url: '/api/equipment/' + vIds + '/',
                         success: function (response) {
                             new PNotify({
                                 title: 'Success!',
@@ -1083,7 +498,7 @@ $(document).ready(function () {
                                 type: 'success',
                                 styling: 'bootstrap3'
                             });
-                            RefreshTable('groupAssetsTable', '/api/group/');
+                            RefreshTable('equipmentTable', '/api/equipment/');
                         },
                         error: function (response) {
                             new PNotify({
@@ -1102,16 +517,13 @@ $(document).ready(function () {
         });
     });
 
-    $('#groupsubmit').on('click', function () {
+    // 添加装备信息
+    $('#equipsubmit').on('click', function () {
         $.ajax({
             cache: true,
             type: "POST",
-            url: "/api/group/",
-            contentType: "application/json",
-            dataType: "json",
-            data: JSON.stringify({
-                "name": $('#group_name').val()
-            }),
+            url: "/api/equipment/",
+            data: $('#equipmentform').serialize(),
             async: false,
             error: function (request) {
                 new PNotify({
@@ -1124,139 +536,15 @@ $(document).ready(function () {
             success: function (data) {
                 new PNotify({
                     title: 'Success!',
-                    text: '资产添加成功',
+                    text: '装备添加成功',
                     type: 'success',
                     styling: 'bootstrap3'
                 });
-                RefreshTable('groupAssetsTable', '/api/group/');
+                RefreshTable('equipmentTable', '/api/equipment/');
             }
         });
     });
 
-    makeGroupTables()
+    makeEquipmentTables()
 
-    //修改应用资产
-
-    function makeZoneTables() {
-        var columns = [
-            {"data": "id"},
-            {"data": "zone_name"},
-            {"data": "zone_contact"},
-            {"data": "zone_local"},
-            {"data": "zone_number"},
-            {"data": "zone_network"},
-        ]
-        var columnDefs = [
-            {
-                targets: [6],
-                render: function (data, type, row, meta) {
-                    return '<div class="btn-group  btn-group-xs">' +
-                        '<button type="button" name="btn-zone-modf" value="' + row.id + '" class="btn btn-default"  aria-label="Justify"><span class="fa fa-edit" aria-hidden="true"></span>' +
-                        '</button>' +
-                        '<button type="button" name="btn-zone-confirm" value="' + row.id + '" class="btn btn-default" aria-label="Justify"><span class="fa fa-trash" aria-hidden="true"></span>' +
-                        '</button>' +
-                        '</div>';
-                },
-                "className": "text-center",
-            },
-        ]
-        var buttons = [{
-            text: '<span class="fa fa-plus"></span>',
-            className: "btn-xs",
-            action: function (e, dt, node, config) {
-                $('#addZoneModal').modal("show");
-            }
-        }]
-        InitDataTable('equipmentTable', "/api/zone/", buttons, columns, columnDefs)
-    }
-
-    makeZoneTables()
-    //修改应用资产
-    $('#equipmentTable tbody').on('click', "button[name='btn-zone-modf']", function () {
-        var vIds = $(this).val();
-        var td = $(this).parent().parent().parent().find("td")
-        var zone_name = td.eq(1).text()
-        var zone_contact = td.eq(2).text()
-        var zone_local = td.eq(3).text()
-        var zone_number = td.eq(4).text()
-        var zone_network = td.eq(5).text()
-        console.log(zone_name, zone_network)
-        modfZone(vIds, zone_name, zone_network, zone_local, zone_contact, zone_number)
-    });
-
-
-    $('#zonesubmit').on('click', function () {
-        $.ajax({
-            cache: true,
-            type: "POST",
-            url: "/api/zone/",
-            contentType: "application/json",
-            dataType: "json",
-            data: JSON.stringify({
-                "zone_name": $('#zone_name').val(),
-                "zone_network": $('#zone_network').val(),
-                "zone_local": $('#zone_local').val(),
-                "zone_contact": $('#zone_contact').val(),
-                "zone_number": $('#zone_number').val(),
-            }),
-            async: false,
-            error: function (request) {
-                new PNotify({
-                    title: 'Ops Failed!',
-                    text: request.responseText,
-                    type: 'error',
-                    styling: 'bootstrap3'
-                });
-            },
-            success: function (data) {
-                new PNotify({
-                    title: 'Success!',
-                    text: '资产添加成功',
-                    type: 'success',
-                    styling: 'bootstrap3'
-                });
-                RefreshTable('equipmentTable', '/api/zone/');
-            }
-        });
-    });
-
-
-    //删除机房资产
-    $('#equipmentTable tbody').on('click', "button[name='btn-zone-confirm']", function () {
-        var vIds = $(this).val();
-        var zoneName = $(this).parent().parent().parent().find("td").eq(1).text()
-        $.confirm({
-            title: '删除确认?',
-            type: 'red',
-            content: "删除机房: " + zoneName,
-            buttons: {
-                确认: function () {
-                    $.ajax({
-                        type: 'DELETE',
-                        url: '/api/zone/' + vIds + '/',
-                        success: function (response) {
-                            new PNotify({
-                                title: 'Success!',
-                                text: '资产删除成功',
-                                type: 'success',
-                                styling: 'bootstrap3'
-                            });
-                            RefreshTable('equipmentTable', '/api/zone/');
-                        },
-                        error: function (response) {
-                            new PNotify({
-                                title: 'Ops Failed!',
-                                text: response.responseText,
-                                type: 'error',
-                                styling: 'bootstrap3'
-                            });
-                        }
-                    });
-                },
-                取消: function () {
-                    return true;
-                },
-            }
-        });
-    });
 })

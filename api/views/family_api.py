@@ -71,7 +71,7 @@ def equipment_list(request, format=None):
 @api_view(['GET', 'PUT', 'DELETE'])
 def equipment_detail(request, id, format=None):
     try:
-        snippet = EquipConfig.objects.get(id=id)
+        snippet = EquipConfig.objects.get(equid=id)
     except EquipConfig.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
 
