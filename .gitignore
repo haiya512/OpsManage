@@ -16,4 +16,4 @@ dump.rdb
 logs/opsmanage.log
 .idea/
 tmp/
-.*backup.*
+*backup.*
