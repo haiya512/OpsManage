@@ -746,9 +746,11 @@ $(document).ready(function () {
         ;
         post_data['type'] = "register"
         $.ajax({
+            cache: true,
             type: "POST",
             url: "/user/manage/",
-            data: post_data,
+            data: JSON.stringify(post_data),
+            async: false,
             error: function (response) {
                 new PNotify({
                     title: 'Ops Failed!',

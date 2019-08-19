@@ -106,9 +106,9 @@ urlpatterns = [
     url(r'^apply/ipvs/ns/$', ipvs_api.IPVS_NS_LIST.as_view()),
     url(r'^apply/ipvs/ns/(?P<pk>[0-9]+)/$', ipvs_api.IPVS_NS_LIST_DETAIL.as_view()),
 
+    # 斗将模块
     url(r'^family/$', family_api.family_list),
     url(r'^family/(?P<id>[0-9]+)/$', family_api.family_detail),
-
     url(r'^equipment/$', family_api.equipment_list),
     url(r'^equipment/(?P<id>[0-9]+)/$', family_api.equipment_detail),
 ]

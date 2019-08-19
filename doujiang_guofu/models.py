@@ -8,6 +8,7 @@ class EquipConfig(models.Model):
 
     class Meta:
         db_table = 'equip_config'
+        default_permissions = ()
         permissions = (
             ("doujiang_guofu_read_equip_config", "读取装备信息表权限"),
             ("doujiang_guofu_change_equip_config", "更改装备信息表权限"),
@@ -23,6 +24,7 @@ class Family(models.Model):
 
     class Meta:
         db_table = 'family_config'
+        default_permissions = ()
         permissions = (
             ("doujiang_guofu_read_family", "读取家族信息表权限"),
             ("doujiang_guofu_change_family", "更改家族信息表权限"),
