@@ -278,7 +278,7 @@ class Ram_Assets(models.Model):
             ("assets_add_ram", "添加内存资产权限"),
             ("assets_delete_ram", "删除内存资产权限"),
         )
-        unique_together = (("assets", "device_slot"), )
+        unique_together = (("assets", "device_slot"),)
         verbose_name = '资产管理'
         verbose_name_plural = '内存资产表'
 
@@ -297,7 +297,7 @@ class NetworkCard_Assets(models.Model):
         default_permissions = ()
         verbose_name = '资产管理'
         verbose_name_plural = '服务器网卡资产表'
-        unique_together = (("assets", "macaddress"), )
+        unique_together = (("assets", "macaddress"),)
 
 
 class Project_Assets(models.Model):
@@ -364,7 +364,7 @@ class Cabinet_Assets(models.Model):
     '''自定义权限'''
 
     class Meta:
-        unique_together = (("zone", "cabinet_name"), )
+        unique_together = (("zone", "cabinet_name"),)
         default_permissions = ()
         db_table = 'opsmanage_cabinet_assets'
         verbose_name = '资产管理'
@@ -447,6 +447,6 @@ class User_Server(models.Model):
             ("assets_delete_user", "删除用户权限"),
             ("assets_read_user", "读取用户权限"),
         )
-        unique_together = (("assets", "user"), )
+        unique_together = (("assets", "user"),)
         verbose_name = '资产管理'
         verbose_name_plural = '用户资产表'

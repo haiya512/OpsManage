@@ -16,14 +16,14 @@ from dao.dj_guofu_game import FAMILY_BASE
 
 
 @api_view(['GET', 'POST'])
-# @permission_required('asset.assets_read_project_assets',raise_exception=True)
+# @permission_required('asset.assets_read_project',raise_exception=True)
 def project_list(request, format=None):
     if request.method == 'GET':
         snippets = Project_Assets.objects.all()
         serializer = serializers.ProjectSerializer(snippets, many=True)
         return Response(serializer.data)
     elif request.method == 'POST':
-        if not request.user.has_perm('asset.assets_add_project_assets'):
+        if not request.user.has_perm('asset.assets_add_project'):
             return Response(status=status.HTTP_403_FORBIDDEN)
         serializer = serializers.ProjectSerializer(data=request.data)
         if serializer.is_valid():
@@ -46,7 +46,7 @@ def project_detail(request, id, format=None):
         return Response(serializer.data)
 
     elif request.method == 'PUT':
-        if not request.user.has_perm('asset.assets_change_project_assets'):
+        if not request.user.has_perm('asset.assets_change_project'):
             return Response(status=status.HTTP_403_FORBIDDEN)
         serializer = serializers.ProjectSerializer(snippet, data=request.data)
         # old_name = snippet.project_name
@@ -58,7 +58,7 @@ def project_detail(request, id, format=None):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     elif request.method == 'DELETE':
-        if not request.user.has_perm('asset.assets_delete_project_Assets'):
+        if not request.user.has_perm('asset.assets_delete_project'):
             return Response(status=status.HTTP_403_FORBIDDEN)
         snippet.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)

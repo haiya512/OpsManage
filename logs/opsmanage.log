@@ -1,1 +1,12 @@
-﻿2019-08-16 17:50:39 [CRITICAL] server.py[line:147] Listen failure: Couldn't listen on 127.0.0.1:8000: [Errno 48] Address already in use.
+﻿2019-08-20 19:54:55 [INFO] server.py[line:106] HTTP/2 support not enabled (install the http2 and tls Twisted extras)
+2019-08-20 19:54:55 [INFO] server.py[line:113] Configuring endpoint tcp:port=8000:interface=127.0.0.1
+2019-08-20 19:54:55 [INFO] server.py[line:144] Listening on TCP address 127.0.0.1:8000
+2019-08-20 20:19:56 [INFO] server.py[line:106] HTTP/2 support not enabled (install the http2 and tls Twisted extras)
+2019-08-20 20:19:56 [INFO] server.py[line:113] Configuring endpoint tcp:port=8000:interface=127.0.0.1
+2019-08-20 20:19:56 [INFO] server.py[line:144] Listening on TCP address 127.0.0.1:8000
+2019-08-20 20:20:11 [INFO] server.py[line:106] HTTP/2 support not enabled (install the http2 and tls Twisted extras)
+2019-08-20 20:20:11 [INFO] server.py[line:113] Configuring endpoint tcp:port=8000:interface=127.0.0.1
+2019-08-20 20:20:11 [INFO] server.py[line:144] Listening on TCP address 127.0.0.1:8000
+2019-08-20 20:33:06 [INFO] server.py[line:106] HTTP/2 support not enabled (install the http2 and tls Twisted extras)
+2019-08-20 20:33:06 [INFO] server.py[line:113] Configuring endpoint tcp:port=8000:interface=127.0.0.1
+2019-08-20 20:33:06 [INFO] server.py[line:144] Listening on TCP address 127.0.0.1:8000
