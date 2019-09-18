@@ -22,7 +22,6 @@ class DelolyModel(LoginRequiredMixin,AssetsSource,View):
     def get(self, request, *args, **kwagrs):
         return render(request, 'deploy/deploy_model.html',{"user":request.user})  
     
-    
 
 class DeployRun(LoginRequiredMixin,View):
     login_url = '/login/'

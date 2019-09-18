@@ -14,14 +14,9 @@ from ansible.utils.vars import load_options_vars
 from .callback import *
 from .inventory import get_inventory
 
-
-
-
-                    
             
-class ANSRunner(object):  
-    
-    
+class ANSRunner(object):
+
     def __init__(
         self,
         hosts=constants.DEFAULT_HOST_LIST,
