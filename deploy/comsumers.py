@@ -73,7 +73,7 @@ class AnsibleModel(WebsocketConsumer,AssetsAnsible):
 
         count = len(sList)
         
-        if count > 0 and request["user"].has_perm('deploy.deploy_exec_deploy_model'):
+        if count > 0 and request["user"].has_perm('deploy.exec_deploy_model'):
             
             self.logId = self.record_resullt(self.scope["user"].username, model_name, ','.join(sList), request.get('deploy_args',""))
 
@@ -157,7 +157,7 @@ class AnsibleScript(WebsocketConsumer,AssetsAnsible):
         
         count = len(sList)                      
                                              
-        if count > 0 and request.get('script_file') and request["user"].has_perm('deploy.deploy_exec_deploy_script'):      
+        if count > 0 and request.get('script_file') and request["user"].has_perm('deploy.exec_deploy_script'):
             self.logId = self.record_resullt(self.scope["user"].username, 'script', ','.join(sList), request.get('script_args',""))
                    
             filePath = self.saveScript(content=request.get('script_file'),filePath='/tmp/script-{ram}'.format(ram=uuid.uuid4().hex[0:8]))

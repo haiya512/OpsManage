@@ -94,13 +94,13 @@ class Deploy_Script(models.Model):
         db_table = 'opsmanage_deploy_script'
         default_permissions = ()
         permissions = (
-            ("deploy_read_deploy_script", "读取部署脚本权限"),
-            ("deploy_change_deploy_script", "修改部署脚本权限"),
-            ("deploy_add_deploy_script", "添加部署脚本权限"),
-            ("deploy_delete_deploy_script", "删除部署脚本权限"),              
-            ("deploy_exec_deploy_script", "执行部署脚本权限"),    
-            ("deploy_exec_deploy_model", "执行部署模块权限"),      
-            ("deploy_read_deploy_model", "读取部署模块权限"),   
+            ("add_deploy_script", "添加部署脚本权限"),
+            ("change_deploy_script", "修改部署脚本权限"),
+            ("delete_deploy_script", "删除部署脚本权限"),
+            ("read_deploy_script", "读取部署脚本权限"),
+            ("exec_deploy_script", "执行部署脚本权限"),
+            ("exec_deploy_model", "执行部署模块权限"),
+            ("read_deploy_model", "读取部署模块权限"),
         )
         verbose_name = '应用部署管理'  
         verbose_name_plural = '部署脚本配置表'         

@@ -130,33 +130,32 @@ class DeployInventoryGroups(LoginRequiredMixin,View):
 class DeployScripts(LoginRequiredMixin,DeployScript,View):        
     login_url = '/login/'
     
-    @method_decorator_adaptor(permission_required, "deploy.deploy_read_deploy_script","/403/")       
+    @method_decorator_adaptor(permission_required, "deploy.read_deploy_script","/403/")
     def get(self, request, *args, **kwagrs):
         if request.GET.get('sid'):
             return JsonResponse({'msg':"数据获取成功","code":200,'data':self.script(request.GET.get('sid'))})
         return render(request, 'deploy/deploy_scripts.html',{"user":request.user,"scriptList":self.scriptList()}) 
     
-    @method_decorator_adaptor(permission_required, "deploy.deploy_add_deploy_script","/403/")   
+    @method_decorator_adaptor(permission_required, "deploy.add_deploy_script","/403/")
     def post(self, request, *args, **kwagrs):
         res = self.createScript(request)
         if isinstance(res, str):return JsonResponse({'msg':res,"code":500,'data':[]})
         return JsonResponse({'msg':"保存成功","code":200,'data':[]})   
     
-    @method_decorator_adaptor(permission_required, "deploy.deploy_change_deploy_script","/403/") 
+    @method_decorator_adaptor(permission_required, "deploy.change_deploy_script","/403/")
     def put(self, request, *args, **kwagrs):
         res = self.updateScript(request=request)
         if isinstance(res, str):return JsonResponse({'msg':res,"code":500,'data':[]})
         return JsonResponse({'msg':"修改成功","code":200,'data':[]})     
 
-    @method_decorator_adaptor(permission_required, "deploy.deploy_delete_deploy_script","/403/") 
+    @method_decorator_adaptor(permission_required, "deploy.delete_deploy_script","/403/")
     def delete(self,request, *args, **kwagrs):
         res = self.deleteScript(request=request)
         if isinstance(res, str):return JsonResponse({'msg':res,"code":500,'data':[]})
         return JsonResponse({'msg':"删除成功","code":200,'data':[]})                
 
-  
-        
-class DeployPlaybooks(LoginRequiredMixin,DeployPlaybook,View):        
+
+class DeployPlaybooks(LoginRequiredMixin,DeployPlaybook,View):
     login_url = '/login/'   
     
     @method_decorator_adaptor(permission_required, "deploy.deploy_read_deploy_playbook","/403/")
