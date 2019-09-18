@@ -43,11 +43,11 @@ class Assets(models.Model):
         db_table = 'opsmanage_assets'
         default_permissions = ()
         permissions = (
-            ("assets_read_assets", "读取资产权限"),
-            ("assets_change_assets", "更改资产权限"),
-            ("assets_add_assets", "添加资产权限"),
-            ("assets_delete_assets", "删除资产权限"),
-            ("assets_dumps_assets", "导出资产权限"),
+            ("add_assets", "添加资产权限"),
+            ("change_assets", "更改资产权限"),
+            ("delete_assets", "删除资产权限"),
+            ("read_assets", "读取资产权限"),
+            ("dumps_assets", "导出资产权限"),
         )
         verbose_name = '资产管理'
         verbose_name_plural = '总资产表'
@@ -140,10 +140,10 @@ class Server_Assets(models.Model):
         db_table = 'opsmanage_server_assets'
         default_permissions = ()
         permissions = (
-            ("assets_read_server", "读取服务器资产权限"),
-            ("assets_change_server", "更改服务器资产权限"),
-            ("assets_add_server", "添加服务器资产权限"),
-            ("assets_delete_server", "删除服务器资产权限"),
+            ("add_server_assets", "添加服务器资产权限"),
+            ("change_server_assets", "更改服务器资产权限"),
+            ("delete_server_assets", "删除服务器资产权限"),
+            ("read_server_assets", "读取服务器资产权限"),
             ("assets_webssh_server", "登陆服务器资产权限"),
         )
         verbose_name = '资产管理'
@@ -207,10 +207,10 @@ class Network_Assets(models.Model):
         db_table = 'opsmanage_network_assets'
         default_permissions = ()
         permissions = (
-            ("assets_read_network", "读取网络资产权限"),
-            ("assets_change_network", "更改网络资产权限"),
-            ("assets_add_network", "添加网络资产权限"),
-            ("assets_delete_network", "删除网络资产权限"),
+            ("read_network_assets", "读取网络资产权限"),
+            ("change_network_assets", "更改网络资产权限"),
+            ("add_network_assets", "添加网络资产权限"),
+            ("delete_network_assets", "删除网络资产权限"),
         )
         verbose_name = '资产管理'
         verbose_name_plural = '网络资产表'
@@ -249,10 +249,10 @@ class Disk_Assets(models.Model):
         db_table = 'opsmanage_disk_assets'
         default_permissions = ()
         permissions = (
-            ("assets_read_disk", "读取磁盘资产权限"),
-            ("assets_change_disk", "更改磁盘资产权限"),
-            ("assets_add_disk", "添加磁盘资产权限"),
-            ("assets_delete_disk", "删除磁盘资产权限"),
+            ("add_disk_assets", "添加磁盘资产权限"),
+            ("change_disk_assets", "更改磁盘资产权限"),
+            ("delete_disk_assets", "删除磁盘资产权限"),
+            ("read_disk_assets", "读取磁盘资产权限"),
         )
         unique_together = (("assets", "device_slot"),)
         verbose_name = '资产管理'
@@ -273,10 +273,10 @@ class Ram_Assets(models.Model):
         db_table = 'opsmanage_ram_assets'
         default_permissions = ()
         permissions = (
-            ("assets_read_ram", "读取内存资产权限"),
-            ("assets_change_ram", "更改内存资产权限"),
-            ("assets_add_ram", "添加内存资产权限"),
-            ("assets_delete_ram", "删除内存资产权限"),
+            ("add_ram_assets", "添加内存资产权限"),
+            ("change_ram_assets", "更改内存资产权限"),
+            ("delete_ram_assets", "删除内存资产权限"),
+            ("read_ram_assets", "读取内存资产权限"),
         )
         unique_together = (("assets", "device_slot"),)
         verbose_name = '资产管理'
@@ -309,10 +309,10 @@ class Project_Assets(models.Model):
         db_table = 'opsmanage_project_assets'
         default_permissions = ()
         permissions = (
-            ("assets_read_project", "读取产品线权限"),
-            ("assets_change_project", "更改产品线权限"),
-            ("assets_add_project", "添加产品线权限"),
-            ("assets_delete_project", "删除产品线权限"),
+            ("add_project_assets", "添加产品线权限"),
+            ("change_project_assets", "更改产品线权限"),
+            ("delete_project_assets", "删除产品线权限"),
+            ("read_project_assets", "读取产品线权限"),
         )
         verbose_name = '资产管理'
         verbose_name_plural = '项目资产表'
@@ -327,10 +327,10 @@ class Service_Assets(models.Model):
         db_table = 'opsmanage_service_assets'
         default_permissions = ()
         permissions = (
-            ("assets_read_service", "读取业务资产权限"),
-            ("assets_change_service", "更改业务资产权限"),
-            ("assets_add_service", "添加业务资产权限"),
-            ("assets_delete_service", "删除业务资产权限"),
+            ("add_service_assets", "添加业务资产权限"),
+            ("change_service_assets", "更改业务资产权限"),
+            ("delete_service_assets", "删除业务资产权限"),
+            ("read_service_assets", "读取业务资产权限"),
         )
         unique_together = (("project", "service_name"),)
         verbose_name = '资产管理'
@@ -349,10 +349,10 @@ class Zone_Assets(models.Model):
         db_table = 'opsmanage_zone_assets'
         default_permissions = ()
         permissions = (
-            ("assets_read_zone", "读取机房资产权限"),
-            ("assets_change_zone", "更改机房资产权限"),
-            ("assets_add_zone", "添加机房资产权限"),
-            ("assets_delete_zone", "删除机房资产权限"),
+            ("add_zone_assets", "添加机房资产权限"),
+            ("change_zone_assets", "更改机房资产权限"),
+            ("delete_zone_assets", "删除机房资产权限"),
+            ("read_zone_assets", "读取机房资产权限"),
         )
         verbose_name = '资产管理'
         verbose_name_plural = '机房资产表'
@@ -379,10 +379,10 @@ class Line_Assets(models.Model):
         db_table = 'opsmanage_line_assets'
         default_permissions = ()
         permissions = (
-            ("assets_read_line", "读取出口线路资产权限"),
-            ("assets_change_line", "更改出口线路资产权限"),
-            ("assets_add_line", "添加出口线路资产权限"),
-            ("assets_delete_line", "删除出口线路资产权限"),
+            ("add_line_assets", "添加出口线路资产权限"),
+            ("change_line_assets", "更改出口线路资产权限"),
+            ("delete_line_assets", "删除出口线路资产权限"),
+            ("read_line_assets", "读取出口线路资产权限"),
         )
         verbose_name = '资产管理'
         verbose_name_plural = '出口线路资产表'
@@ -396,10 +396,10 @@ class Raid_Assets(models.Model):
         db_table = 'opsmanage_raid_assets'
         default_permissions = ()
         permissions = (
-            ("assets_read_raid", "读取Raid资产权限"),
-            ("assets_change_raid", "更改Raid资产权限"),
-            ("assets_add_raid", "添加Raid资产权限"),
-            ("assets_delete_raid", "删除Raid资产权限"),
+            ("add_raid_assets", "添加Raid资产权限"),
+            ("change_raid_assets", "更改Raid资产权限"),
+            ("delete_raid_assets", "删除Raid资产权限"),
+            ("read_raid_assets", "读取Raid资产权限"),
         )
         verbose_name = '资产管理'
         verbose_name_plural = 'Raid资产表'
@@ -412,11 +412,11 @@ class Tags_Assets(models.Model):
         db_table = 'opsmanage_tags_assets'
         default_permissions = ()
         permissions = (
-            ("assets_read_tags", "读取标签资产权限"),
-            ("assets_change_tags", "更改标签资产权限"),
-            ("assets_add_tags", "添加标签资产权限"),
-            ("assets_delete_tags", "删除标签资产权限"),
-            ("assets_read_tree", "读取资产数权限"),
+            ("add_tags_assets", "添加标签资产权限"),
+            ("change_tags_assets", "更改标签资产权限"),
+            ("delete_tags_assets", "删除标签资产权限"),
+            ("read_tags_assets", "读取标签资产权限"),
+            ("read_tree_assets", "读取资产数权限"),
         )
         verbose_name = '资产管理'
         verbose_name_plural = '资产标签表'
@@ -442,10 +442,10 @@ class User_Server(models.Model):
         db_table = 'opsmanage_user_assets'
         default_permissions = ()
         permissions = (
-            ("assets_add_user", "添加用户权限"),
-            ("assets_change_user", "修改用户权限"),
-            ("assets_delete_user", "删除用户权限"),
-            ("assets_read_user", "读取用户权限"),
+            ("add_user_assets", "添加用户权限"),
+            ("change_user_assets", "修改用户权限"),
+            ("delete_user_assets", "删除用户权限"),
+            ("read_user_assets", "读取用户权限"),
         )
         unique_together = (("assets", "user"),)
         verbose_name = '资产管理'
