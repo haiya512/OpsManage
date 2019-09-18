@@ -23,7 +23,7 @@ def project_list(request, format=None):
         serializer = serializers.ProjectSerializer(snippets, many=True)
         return Response(serializer.data)
     elif request.method == 'POST':
-        if not request.user.has_perm('asset.assets_add_project'):
+        if not request.user.has_perm('asset.add_project_assets'):
             return Response(status=status.HTTP_403_FORBIDDEN)
         serializer = serializers.ProjectSerializer(data=request.data)
         if serializer.is_valid():
@@ -46,7 +46,7 @@ def project_detail(request, id, format=None):
         return Response(serializer.data)
 
     elif request.method == 'PUT':
-        if not request.user.has_perm('asset.assets_change_project'):
+        if not request.user.has_perm('asset.change_project_assets'):
             return Response(status=status.HTTP_403_FORBIDDEN)
         serializer = serializers.ProjectSerializer(snippet, data=request.data)
         # old_name = snippet.project_name
@@ -58,7 +58,7 @@ def project_detail(request, id, format=None):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     elif request.method == 'DELETE':
-        if not request.user.has_perm('asset.assets_delete_project'):
+        if not request.user.has_perm('asset.delete_project_assets'):
             return Response(status=status.HTTP_403_FORBIDDEN)
         snippet.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
@@ -75,7 +75,7 @@ def service_list(request, format=None):
         serializer = serializers.ServiceSerializer(snippets, many=True)
         return Response(serializer.data)
     elif request.method == 'POST':
-        if not request.user.has_perm('asset.assets_add_service_assets'):
+        if not request.user.has_perm('asset.add_service_assets'):
             return Response(status=status.HTTP_403_FORBIDDEN)
         del request.data['project_name']
         try:
@@ -108,7 +108,7 @@ def service_detail(request, id, format=None):
         return Response(serializer.data)
 
     elif request.method == 'PUT':
-        if not request.user.has_perm('asset.assets_change_service_assets'):
+        if not request.user.has_perm('asset.change_service_assets'):
             return Response(status=status.HTTP_403_FORBIDDEN)
         serializer = serializers.ServiceSerializer(snippet, data=request.data)
         # old_name = snippet.service_name
@@ -121,7 +121,7 @@ def service_detail(request, id, format=None):
     # 后面已经有了一层判断,为何还要再判断一次?
     # elif request.method == 'DELETE' and request.user.has_perm('asset.assets_delete_assets'):
     elif request.method == 'DELETE':
-        if not request.user.has_perm('asset.assets_delete_service_assets'):
+        if not request.user.has_perm('asset.delete_service_assets'):
             return Response(status=status.HTTP_403_FORBIDDEN)
         snippet.delete()
         # recordAssets.delay(user=str(request.user),content="删除业务类型：{service_name}".format(service_name=snippet.service_name),type="service",id=id)
@@ -183,7 +183,7 @@ def group_detail(request, id, format=None):
 
 
 @api_view(['GET', 'POST'])
-@permission_required('asset.assets_add_zone_assets', raise_exception=True)
+@permission_required('asset.add_zone_assets', raise_exception=True)
 def zone_list(request, format=None):
     """
     List all order, or create a server assets order.
@@ -203,7 +203,7 @@ def zone_list(request, format=None):
 
 
 @api_view(['GET', 'PUT', 'DELETE'])
-@permission_required('asset.assets_change_zone_assets', raise_exception=True)
+@permission_required('asset.change_zone_assets', raise_exception=True)
 def zone_detail(request, id, format=None):
     """
     Retrieve, update or delete a server assets instance.
@@ -228,7 +228,7 @@ def zone_detail(request, id, format=None):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     elif request.method == 'DELETE':
-        if not request.user.has_perm('asset.assets_delete_zone_assets'):
+        if not request.user.has_perm('asset.delete_zone_assets'):
             return Response(status=status.HTTP_403_FORBIDDEN)
         snippet.delete()
         # recordAssets.delay(user=str(request.user),content="删除机房资产：{zone_name}".format(zone_name=snippet.zone_name),type="zone",id=id)
@@ -236,7 +236,7 @@ def zone_detail(request, id, format=None):
 
 
 @api_view(['GET', 'POST'])
-@permission_required('asset.assets_add_raid_assets', raise_exception=True)
+@permission_required('asset.add_raid_assets', raise_exception=True)
 def raid_list(request, format=None):
     """
     List all order, or create a server assets order.
@@ -255,7 +255,7 @@ def raid_list(request, format=None):
 
 
 @api_view(['GET', 'PUT', 'DELETE'])
-@permission_required('asset.assets_change_raid_assets', raise_exception=True)
+@permission_required('asset.change_raid_assets', raise_exception=True)
 def raid_detail(request, id, format=None):
     """
     Retrieve, update or delete a server assets instance.
@@ -280,7 +280,7 @@ def raid_detail(request, id, format=None):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     elif request.method == 'DELETE':
-        if not request.user.has_perm('asset.assets_delete_raid_assets'):
+        if not request.user.has_perm('asset.delete_raid_assets'):
             return Response(status=status.HTTP_403_FORBIDDEN)
         snippet.delete()
         # recordAssets.delay(user=str(request.user),content="删除Raid类型：{raid_name}".format(raid_name=snippet.raid_name),type="raid",id=id)
@@ -307,7 +307,7 @@ class AssetList(APIView, DataHandle):
         return Response(dataList)
 
     def post(self, request, *args, **kwargs):
-        if not request.user.has_perm('asset.assets_add_assets'):
+        if not request.user.has_perm('asset.add_assets'):
             return Response(status=status.HTTP_403_FORBIDDEN)
         serializer = serializers.AssetsSerializer(data=request.data)
         if serializer.is_valid():
@@ -331,7 +331,7 @@ def asset_detail(request, id, format=None):
         return Response(serializer.data)
 
     elif request.method == 'PUT':
-        if not request.user.has_perm('asset.assets_change_assets'):
+        if not request.user.has_perm('asset.change_assets'):
             return Response(status=status.HTTP_403_FORBIDDEN)
         serializer = serializers.AssetsSerializer(snippet, data=request.data)
         if serializer.is_valid():
@@ -341,7 +341,7 @@ def asset_detail(request, id, format=None):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     elif request.method == 'DELETE':
-        if not request.user.has_perm('asset.delete_asset_assets'):
+        if not request.user.has_perm('asset.delete_assets'):
             return Response(status=status.HTTP_403_FORBIDDEN)
         snippet.delete()
         # recordAssets.delay(user=str(request.user),content="删除资产：{name}".format(name=snippet.name),type="assets",id=id)
@@ -426,7 +426,7 @@ def asset_server_detail(request, id, format=None):
 
 
 @api_view(['GET', 'POST'])
-@permission_required('asset.assets_add_network', raise_exception=True)
+@permission_required('asset.add_network_assets', raise_exception=True)
 def asset_net_list(request, format=None):
     """
     List all order, or create a new net assets.
@@ -449,7 +449,7 @@ def asset_net_list(request, format=None):
 
 
 @api_view(['GET', 'PUT', 'DELETE'])
-@permission_required('asset.assets_change_network', raise_exception=True)
+@permission_required('asset.change_network_assets', raise_exception=True)
 def asset_net_detail(request, id, format=None):
     """
     Retrieve, update or delete a net assets instance.
@@ -465,11 +465,11 @@ def asset_net_detail(request, id, format=None):
 
     elif request.method == 'PUT':
         '''如果更新字段包含assets则先更新总资产表'''
-        if (request.data.get('data')):
+        if request.data.get('data'):
             data = request.data.get('data')
         else:
             data = request.data
-        if (data.get('assets')):
+        if data.get('assets'):
             assets_data = data.pop('assets')
             try:
                 assets_snippet = Assets.objects.get(id=snippet.assets.id)
@@ -486,7 +486,7 @@ def asset_net_detail(request, id, format=None):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     elif request.method == 'DELETE':
-        if not request.user.has_perm('asset.assets_delete_net_assets'):
+        if not request.user.has_perm('asset.delete_network_assets'):
             return Response(status=status.HTTP_403_FORBIDDEN)
         snippet.delete()
         try:
@@ -549,7 +549,7 @@ def asset_count(request, format=None):
 
 
 @api_view(['GET', 'POST'])
-@permission_required('asset.assets_add_cabinet_assets', raise_exception=True)
+@permission_required('asset.add_cabinet_assets', raise_exception=True)
 def cabinet_list(request, format=None):
     """
     List all order, or create a server assets order.
@@ -574,7 +574,7 @@ def cabinet_list(request, format=None):
 
 
 @api_view(['GET', 'PUT', 'DELETE'])
-@permission_required('asset.assets_change_cabinet', raise_exception=True)
+@permission_required('asset.change_cabinet_assets', raise_exception=True)
 def cabinet_detail(request, id, format=None):
     """
     Retrieve, update or delete a server assets instance.
@@ -599,14 +599,14 @@ def cabinet_detail(request, id, format=None):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     elif request.method == 'DELETE':
-        if not request.user.has_perm('asset.assets_delete_cabinet_assets'):
+        if not request.user.has_perm('asset.delete_cabinet_assets'):
             return Response(status=status.HTTP_403_FORBIDDEN)
         snippet.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 @api_view(['GET', 'POST'])
-@permission_required('asset.assets_add_line', raise_exception=True)
+@permission_required('asset.add_line_assets', raise_exception=True)
 def line_list(request, format=None):
     """
     List all order, or create a server assets order.
@@ -626,7 +626,7 @@ def line_list(request, format=None):
 
 
 @api_view(['GET', 'PUT', 'DELETE'])
-@permission_required('asset.can_change_line_assets', raise_exception=True)
+@permission_required('asset.change_line_assets', raise_exception=True)
 def line_detail(request, id, format=None):
     """
     Retrieve, update or delete a server assets instance.
@@ -651,7 +651,7 @@ def line_detail(request, id, format=None):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     elif request.method == 'DELETE':
-        if not request.user.has_perm('OpsManage.can_delete_line_assets'):
+        if not request.user.has_perm('OpsManage.delete_line_assets'):
             return Response(status=status.HTTP_403_FORBIDDEN)
         snippet.delete()
         # recordAssets.delay(user=str(request.user),content="删除出口线路：{line_name}".format(line_name=snippet.line_name),type="line",id=id)
@@ -746,7 +746,7 @@ def tags_assets(request, id, format=None):
 
 
 @api_view(['POST'])
-@permission_required('asset.assets_change_assets', raise_exception=True)
+@permission_required('asset.change_assets', raise_exception=True)
 def assets_tags(request, id, format=None):
     """
     List all order, or create a server assets order.
@@ -776,14 +776,14 @@ def assets_tags(request, id, format=None):
 
 
 @api_view(['GET', 'POST'])
-@permission_required('assets.assets_read_tree', raise_exception=True)
+@permission_required('assets.read_tree_assets', raise_exception=True)
 def assets_tree(request, format=None):
     if request.method == 'GET':
         return Response(ASSETS_BASE.tree(tree=None))
 
 
 @api_view(['GET', 'PUT'])
-@permission_required('assets.assets_read_tree', raise_exception=True)
+@permission_required('assets.read_tree_assets', raise_exception=True)
 def tree_service(request, id, format=None):
     if request.method == 'GET':
         return Response(ASSETS_BASE.service(service=id))

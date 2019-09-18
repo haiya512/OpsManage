@@ -366,6 +366,12 @@ class Cabinet_Assets(models.Model):
     class Meta:
         unique_together = (("zone", "cabinet_name"),)
         default_permissions = ()
+        permissions = (
+            ("add_cabinet_assets", "添加CABINET资产权限"),
+            ("change_cabinet_assets", "更改CABINET资产权限"),
+            ("delete_cabinet_assets", "删除CABINET资产权限"),
+            ("read_cabinet_assets", "读取CABINET资产权限"),
+        )
         db_table = 'opsmanage_cabinet_assets'
         verbose_name = '资产管理'
         verbose_name_plural = '机柜资产表'
