@@ -425,7 +425,7 @@ class DBManage(AssetsBase):
             logger.error(msg="DBManage没有{sub}方法".format(sub=sub))       
             return "参数错误" 
     
-    def __check_user_perms(self,request,perms='databases.databases_read_database_server_config'):
+    def __check_user_perms(self,request,perms='databases.read_database_server_config'):
         
         dbServer = self.__get_db(request)
 
@@ -540,7 +540,7 @@ class DBManage(AssetsBase):
     
     def exec_sql(self, request):
         
-        dbServer = self.__check_user_perms(request,'databases.databases_dml_database_server_config')
+        dbServer = self.__check_user_perms(request,'databases.dml_database_server_config')
         if not dbServer:return "您没有权限操作此项"        
                
         sql_parse = self.__check_sql_parse(request, allow_sql=self.dml_sql + self.ddl_sql + self.dql_sql,dbname=dbServer.db_name)
@@ -554,7 +554,7 @@ class DBManage(AssetsBase):
             return sql_parse   
         
     def query_sql(self, request):
-        dbServer = self.__check_user_perms(request,'databases.databases_query_database_server_config')
+        dbServer = self.__check_user_perms(request,'databases.query_database_server_config')
         if not dbServer:return "您没有权限操作此项"
         
         if dbServer.db_rw not in ["read","r/w"]:return "请勿在主库上面执行查询操作"
@@ -570,7 +570,7 @@ class DBManage(AssetsBase):
             
     
     def binlog_sql(self,request):
-        if not  self.__check_user_perms(request,'databases.databases_binlog_database_server_config'):return "您没有权限操作此项"
+        if not  self.__check_user_perms(request,'databases.binlog_database_server_config'):return "您没有权限操作此项"
         result = self.__get_db_server(request).queryAll(sql='show binary logs;')
         binLogList = []
         if isinstance(result,tuple):
@@ -579,7 +579,7 @@ class DBManage(AssetsBase):
         return binLogList
     
     def table_list(self,request):
-        if not self.__check_user_perms(request,'databases.databases_query_database_server_config'):return "您没有权限操作此项"
+        if not self.__check_user_perms(request,'databases.query_database_server_config'):return "您没有权限操作此项"
         result = self.__get_db_server(request).queryAll(sql='show tables;')
         grant_tables = self.__check_user_db_tables(request)
         tableList = []
@@ -594,7 +594,7 @@ class DBManage(AssetsBase):
         return tableList
     
     def table_schema(self,request):
-        if not self.__check_user_perms(request,'databases.databases_schema_database_server_config'):return "您没有权限操作此项"
+        if not self.__check_user_perms(request,'databases.schema_database_server_config'):return "您没有权限操作此项"
         table_data = {}
         dbInfo = self.__get_db(request)
         dbRbt  = self.__get_db_server(request)
@@ -610,7 +610,7 @@ class DBManage(AssetsBase):
         return table_data
             
     def parse_sql(self,request):
-        if not self.__check_user_perms(request,'databases.databases_binlog_database_server_config'):return "您没有权限操作此项"
+        if not self.__check_user_perms(request,'databases.binlog_database_server_config'):return "您没有权限操作此项"
         sqlList = []
         try:
             dbServer = self.__get_db(request)
@@ -631,7 +631,7 @@ class DBManage(AssetsBase):
         return sqlList
     
     def optimize_sql(self,request):
-        if not self.__check_user_perms(request,'databases.databases_optimize_database_server_config'):return "您没有权限操作此项"
+        if not self.__check_user_perms(request,'databases.optimize_database_server_config'):return "您没有权限操作此项"
         dbServer = self.__get_db(request)
         status,result = base.getSQLAdvisor(host=dbServer.db_assets.server_assets.ip, user=dbServer.db_user,
                                            passwd=dbServer.db_passwd, dbname=dbServer.db_name, 

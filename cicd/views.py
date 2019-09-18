@@ -25,35 +25,35 @@ class Config(LoginRequiredMixin, AppsManage, View):
         else:
             return HttpResponseRedirect('/404/')
 
-    @method_decorator_adaptor(permission_required, "cicd.project_read_project_config", "/403/")
+    @method_decorator_adaptor(permission_required, "cicd.read_project_config", "/403/")
     def config(self, request, *args, **kwagrs):
         return render(request, 'cicd/cicd_config.html',
                       {"user": request.user, "assets": self.base(), "project_dir": settings.WORKSPACES})
 
-    @method_decorator_adaptor(permission_required, "cicd.project_read_project_config", "/403/")
+    @method_decorator_adaptor(permission_required, "cicd.read_project_config", "/403/")
     def info(self, request, *args, **kwagrs):
         res = self.info_apps(request)
         if isinstance(res, str): return JsonResponse({'msg': res, "code": 500, 'data': []})
         return JsonResponse({'msg': "添加成功", "code": 200, 'data': res})
 
-    @method_decorator_adaptor(permission_required, "cicd.project_change_project_config", "/403/")
+    @method_decorator_adaptor(permission_required, "cicd.change_project_config", "/403/")
     def init(self, request, *args, **kwagrs):
         res = self.init_apps(request)
         if isinstance(res, str): return JsonResponse({'msg': res, "code": 500, 'data': []})
         return JsonResponse({'msg': "操作成功", "code": 200, 'data': []})
 
-    @method_decorator_adaptor(permission_required, "cicd.project_change_project_config", "/403/")
+    @method_decorator_adaptor(permission_required, "cicd.change_project_config", "/403/")
     def edit(self, request, *args, **kwagrs):
         return render(request, 'cicd/cicd_edit.html',
                       {"user": request.user, "assets": self.base(), "project_dir": settings.WORKSPACES})
 
-    @method_decorator_adaptor(permission_required, "cicd.project_add_project_config", "/403/")
+    @method_decorator_adaptor(permission_required, "cicd.add_project_config", "/403/")
     def create(self, request, *args, **kwagrs):
         res = self.create_apps(request)
         if isinstance(res, str): return JsonResponse({'msg': res, "code": 500, 'data': []})
         return JsonResponse({'msg': "添加成功", "code": 200, 'data': []})
 
-    @method_decorator_adaptor(permission_required, "cicd.project_change_project_config", "/403/")
+    @method_decorator_adaptor(permission_required, "cicd.change_project_config", "/403/")
     def update(self, request, *args, **kwagrs):
         res = self.update_apps(request)
         if isinstance(res, str): return JsonResponse({'msg': res, "code": 500, 'data': []})
@@ -94,7 +94,7 @@ class Manage(LoginRequiredMixin, AppsManage, AssetsSource, View):
         else:
             return HttpResponseRedirect('/404/')
 
-    @method_decorator_adaptor(permission_required, "cicd.project_read_project_config", "/403/")
+    @method_decorator_adaptor(permission_required, "cicd.read_project_config", "/403/")
     def viewLogs(self, request):
         result = []
         project = self.get_apps(request)
@@ -190,7 +190,7 @@ class Manage(LoginRequiredMixin, AppsManage, AssetsSource, View):
         else:
             return JsonResponse({'msg': "项目或者任务不存在", "code": 500, 'data': []})
 
-    @method_decorator_adaptor(permission_required, "cicd.project_change_project_config", "/403/")
+    @method_decorator_adaptor(permission_required, "cicd.change_project_config", "/403/")
     def create_branch(self, request):
         version, project = self.apps_type(request)
         if project.project_model == 'branch':
@@ -202,7 +202,7 @@ class Manage(LoginRequiredMixin, AppsManage, AssetsSource, View):
         else:
             return JsonResponse({'msg': "操作成功", "code": 200, 'data': []})
 
-    @method_decorator_adaptor(permission_required, "cicd.project_delete_project_config", "/403/")
+    @method_decorator_adaptor(permission_required, "cicd.delete_project_config", "/403/")
     def delete_branch(self, request):
         version, project = self.apps_type(request)
         if project.project_model == 'branch':

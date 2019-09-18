@@ -3,7 +3,7 @@
 from django.db import models
 from asset.models import Project_Assets,Service_Assets      
 
-class IPVS_CONFIG(models.Model):   
+class IPVS_CONFIG(models.Model):
     scheduler_mode = (
                 ('sh',u'地址哈希'),
                 ('rr',u'轮训'),
@@ -25,14 +25,15 @@ class IPVS_CONFIG(models.Model):
     line =  models.CharField(max_length=100,verbose_name='线路描述',blank=True,null=True)
     desc = models.CharField(max_length=200,verbose_name='备注',blank=True,null=True)
     is_active = models.SmallIntegerField(verbose_name='激活',default=0)
+
     class Meta:
         db_table = 'opsmanage_ipvs_config'
         default_permissions = ()
         permissions = (
-            ("ipvs_read_ipvs_config", "读取IPVS信息表权限"),
-            ("ipvs_change_ipvs_config", "更改IPVS信息表权限"),
-            ("ipvs_add_ipvs_config", "添加IPVS信息表权限"),
-            ("ipvs_delete_ipvs_config", "删除IPVS信息表权限"),     
+            ("add_ipvs_config", "添加IPVS信息表权限"),
+            ("change_ipvs_config", "更改IPVS信息表权限"),
+            ("delete_ipvs_config", "删除IPVS信息表权限"),
+            ("read_ipvs_config", "读取IPVS信息表权限"),
         )
         unique_together = (("vip", "port", "ipvs_assets"))
         verbose_name = '应用管理'  

@@ -18,7 +18,7 @@ from utils import mysql as MySQL
 from utils.base import method_decorator_adaptor
 
 @api_view(['POST'])
-@permission_required('databases.database_can_add_database_server_config',raise_exception=True)
+@permission_required('databases.add_database_server_config',raise_exception=True)
 def db_list(request,format=None):               
     if request.method == 'POST':  
         try:
@@ -49,7 +49,7 @@ def db_detail(request, id,format=None):
         return Response(serializer.data) 
             
     if request.method == 'PUT':
-        if not request.user.has_perm('databases.database_can_change_database_server_config'):
+        if not request.user.has_perm('databases.change_database_server_config'):
             return Response(status=status.HTTP_403_FORBIDDEN) 
         serializer = serializers.DataBaseServerSerializer(snippet, data=request.data)
         if serializer.is_valid():
@@ -58,7 +58,7 @@ def db_detail(request, id,format=None):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
      
     elif request.method == 'DELETE':
-        if not request.user.has_perm('databases.database_can_delete_database_server_config'):
+        if not request.user.has_perm('databases.delete_database_server_config'):
             return Response(status=status.HTTP_403_FORBIDDEN)
         snippet.delete()
         return Response(status=status.HTTP_204_NO_CONTENT) 
@@ -78,9 +78,10 @@ def sql_custom_list(request,format=None):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
+
+
 @api_view(['GET','PUT', 'DELETE'])
-@permission_required('databases.database_can_change_custom_high_risk_sql',raise_exception=True)
+@permission_required('databases.change_custom_high_risk_sql',raise_exception=True)
 def sql_custom_detail(request, id,format=None):
     """
     Retrieve, update or delete a server assets instance.
@@ -102,7 +103,7 @@ def sql_custom_detail(request, id,format=None):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
      
     elif request.method == 'DELETE':
-        if not request.user.has_perm('databases.database_can_delete_custom_high_risk_sql'):
+        if not request.user.has_perm('databases.delete_custom_high_risk_sql'):
             return Response(status=status.HTTP_403_FORBIDDEN)
         snippet.delete()
         return Response(status=status.HTTP_204_NO_CONTENT) 
@@ -110,7 +111,7 @@ def sql_custom_detail(request, id,format=None):
     
 class DatabaseExecuteHistroy(APIView):
     
-    @method_decorator_adaptor(permission_required, "databases.databases_read_sql_execute_histroy","/403/")        
+    @method_decorator_adaptor(permission_required, "databases.databases_read_sql_execute_histroy","/403/")
     def get(self,request,*args,**kwargs):
         query_params = dict()
         for k in request.query_params.keys():
@@ -137,7 +138,7 @@ class DatabaseExecuteHistroy(APIView):
         return page.get_paginated_response(ser.data)    
     
 @api_view(['POST','GET'])
-@permission_required('databases.database_can_read_database_server_config',raise_exception=True)  
+@permission_required('databases.read_database_server_config',raise_exception=True)
 def db_status(request, id,format=None):
     try:
         dbServer = DataBase_Server_Config.objects.get(id=id)
@@ -155,7 +156,7 @@ def db_status(request, id,format=None):
         return JsonResponse({"code":200,"msg":"success","data":MySQL_STATUS})
     
 @api_view(['POST','GET'])
-@permission_required('databases.database_can_read_database_server_config',raise_exception=True)  
+@permission_required('databases.read_database_server_config',raise_exception=True)
 def db_org(request, id,format=None):
     try:
         dbServer = DataBase_Server_Config.objects.get(id=id)
@@ -172,7 +173,7 @@ def db_org(request, id,format=None):
         
         
 @api_view(['POST','GET'])
-@permission_required('databases.databases_query_database_server_config',raise_exception=True)  
+@permission_required('databases.query_database_server_config',raise_exception=True)
 def db_tree(request,format=None):   
     if request.method == 'GET':
         return Response(DBManage().query_db_tree(request=request))         

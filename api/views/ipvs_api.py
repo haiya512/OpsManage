@@ -15,26 +15,26 @@ from utils.base import method_decorator_adaptor
 
 
 @api_view(['GET'])
-@permission_required('apply.ipvs_read_ipvs_config',raise_exception=True)
+@permission_required('apply.read_ipvs_config',raise_exception=True)
 def ipvs_tree(request,format=None):
     if request.method == 'GET':
         return Response(ASSETSIPVS.tree())
 
 @api_view(['GET'])
-@permission_required('apply.ipvs_read_ipvs_config',raise_exception=True)
+@permission_required('apply.read_ipvs_config',raise_exception=True)
 def ipvs_assets(request,format=None):
     if request.method == 'GET':
         return Response(ASSETSIPVS.assets())    
 
 @api_view(['GET', 'PUT' ])
-@permission_required('apply.ipvs_read_ipvs_config',raise_exception=True)
+@permission_required('apply.read_ipvs_config',raise_exception=True)
 def ipvs_tree_service(request,id,format=None):
     if request.method == 'GET':
         return Response(ASSETSIPVS.service(service=id)) 
 
 class IPVSLIST(APIView,IVPSManage):
      
-    @method_decorator_adaptor(permission_required, "apply.ipvs_read_ipvs_config","/403/")     
+    @method_decorator_adaptor(permission_required, "apply.read_ipvs_config","/403/")
     def get(self,request,*args,**kwargs):
         query_params = dict()
         for ds in request.query_params.keys():
@@ -48,7 +48,7 @@ class IPVSLIST(APIView,IVPSManage):
         ser = serializers.IPVSSerializer(instance=page_user_list, many=True)
         return page.get_paginated_response(ser.data) 
  
-    @method_decorator_adaptor(permission_required, "apply.ipvs_add_ipvs_config","/403/")     
+    @method_decorator_adaptor(permission_required, "apply.add_ipvs_config","/403/")
     def post(self,request,*args,**kwargs):
         serializer = serializers.IPVSSerializer(data=request.data)
         if serializer.is_valid():
@@ -64,13 +64,13 @@ class IPVSLIST_DETAIL(APIView,IVPSManage):
         except IPVS_CONFIG.DoesNotExist:
             raise Http404    
     
-    @method_decorator_adaptor(permission_required, "apply.ipvs_read_ipvs_config","/403/")     
+    @method_decorator_adaptor(permission_required, "apply.read_ipvs_config","/403/")
     def get(self,request,pk,format=None):
         snippet = self.get_object(pk)
         serializer = serializers.IPVSSerializer(snippet)
         return Response(serializer.data)
     
-    @method_decorator_adaptor(permission_required, "apply.ipvs_change_ipvs_config","/403/")
+    @method_decorator_adaptor(permission_required, "apply.change_ipvs_config","/403/")
     def put(self, request, pk, format=None):
         snippet = self.get_object(pk)
         serializer = serializers.IPVSSerializer(snippet, data=request.data)
@@ -82,7 +82,7 @@ class IPVSLIST_DETAIL(APIView,IVPSManage):
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)    
 
-    @method_decorator_adaptor(permission_required, "apply.ipvs_delete_ipvs_config","/403/")
+    @method_decorator_adaptor(permission_required, "apply.delete_ipvs_config","/403/")
     def delete(self, request, pk, format=None):
         snippet = self.get_object(pk)
         snippet.delete()
@@ -94,7 +94,7 @@ class IPVSLIST_DETAIL(APIView,IVPSManage):
      
 class IPVS_RS_LIST(APIView,IVPSManage):
      
-    @method_decorator_adaptor(permission_required, "apply.ipvs_read_ipvs_config","/403/")     
+    @method_decorator_adaptor(permission_required, "apply.read_ipvs_config","/403/")
     def get(self,request,*args,**kwargs): 
         query_params = dict()
         for ds in request.query_params.keys():
@@ -108,7 +108,7 @@ class IPVS_RS_LIST(APIView,IVPSManage):
         ser = serializers.IPVSRealServerSerializer(instance=page_user_list, many=True)
         return page.get_paginated_response(ser.data)  
  
-    @method_decorator_adaptor(permission_required, "apply.ipvs_add_ipvs_config","/403/")     
+    @method_decorator_adaptor(permission_required, "apply.add_ipvs_config","/403/")
     def post(self,request,*args,**kwargs):
         serializer = serializers.IPVSRealServerSerializer(data=request.data)
         if serializer.is_valid():
@@ -127,13 +127,13 @@ class IPVS_RS_LIST_DETAIL(APIView,IVPSManage):
         except IPVS_RS_CONFIG.DoesNotExist:
             raise Http404    
     
-    @method_decorator_adaptor(permission_required, "apply.ipvs_read_ipvs_config","/403/")     
+    @method_decorator_adaptor(permission_required, "apply.read_ipvs_config","/403/")
     def get(self,request,pk,format=None):
         snippet = self.get_object(pk)
         serializer = serializers.IPVSRealServerSerializer(snippet)
         return Response(serializer.data)
     
-    @method_decorator_adaptor(permission_required, "apply.ipvs_change_ipvs_config","/403/")
+    @method_decorator_adaptor(permission_required, "apply.change_ipvs_config","/403/")
     def put(self, request, pk, format=None):
         snippet = self.get_object(pk)
         serializer = serializers.IPVSRealServerSerializer(snippet, data=request.data)     
@@ -145,7 +145,7 @@ class IPVS_RS_LIST_DETAIL(APIView,IVPSManage):
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)    
 
-    @method_decorator_adaptor(permission_required, "apply.ipvs_delete_ipvs_config","/403/")
+    @method_decorator_adaptor(permission_required, "apply.delete_ipvs_config","/403/")
     def delete(self, request, pk, format=None):
         snippet = self.get_object(pk)
         IPVS = IPVSRunner(vip=self.get_ipvs_vip(id=snippet.ipvs_vip.id),realserver=snippet)
@@ -157,7 +157,7 @@ class IPVS_RS_LIST_DETAIL(APIView,IVPSManage):
 
 class IPVS_NS_LIST(APIView):
      
-    @method_decorator_adaptor(permission_required, "apply.ipvs_read_ipvs_config","/403/")     
+    @method_decorator_adaptor(permission_required, "apply.read_ipvs_config","/403/")
     def get(self,request,*args,**kwargs): 
         query_params = dict()
         for ds in request.query_params.keys():
@@ -171,7 +171,7 @@ class IPVS_NS_LIST(APIView):
         ser = serializers.IPVSNanmeServerSerializer(instance=page_user_list, many=True)
         return page.get_paginated_response(ser.data)  
  
-    @method_decorator_adaptor(permission_required, "apply.ipvs_add_ipvs_config","/403/")     
+    @method_decorator_adaptor(permission_required, "apply.add_ipvs_config","/403/")
     def post(self,request,*args,**kwargs):
         serializer = serializers.IPVSNanmeServerSerializer(data=request.data)
         if serializer.is_valid():
@@ -188,13 +188,13 @@ class IPVS_NS_LIST_DETAIL(APIView):
         except IPVS_NS_CONFIG.DoesNotExist:
             raise Http404    
     
-    @method_decorator_adaptor(permission_required, "apply.ipvs_read_ipvs_config","/403/")     
+    @method_decorator_adaptor(permission_required, "apply.read_ipvs_config","/403/")
     def get(self,request,pk,format=None):
         snippet = self.get_object(pk)
         serializer = serializers.IPVSNanmeServerSerializer(snippet)
         return Response(serializer.data)
     
-    @method_decorator_adaptor(permission_required, "apply.ipvs_change_ipvs_config","/403/")
+    @method_decorator_adaptor(permission_required, "apply.change_ipvs_config","/403/")
     def put(self, request, pk, format=None):
         snippet = self.get_object(pk)
         serializer = serializers.IPVSNanmeServerSerializer(snippet, data=request.data)     
@@ -203,7 +203,7 @@ class IPVS_NS_LIST_DETAIL(APIView):
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)    
 
-    @method_decorator_adaptor(permission_required, "apply.ipvs_delete_ipvs_config","/403/")
+    @method_decorator_adaptor(permission_required, "apply.delete_ipvs_config","/403/")
     def delete(self, request, pk, format=None):
         snippet = self.get_object(pk)         
         snippet.delete()

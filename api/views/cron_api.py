@@ -11,7 +11,7 @@ from django.contrib.auth.decorators import permission_required
 
 
 @api_view(['GET', 'POST'])
-@permission_required('sched.cron_can_add_cron_config', raise_exception=True)
+@permission_required('sched.can_add_cron_config', raise_exception=True)
 def cron_list(request, format=None):
     """
     List all order, or create a server assets order.

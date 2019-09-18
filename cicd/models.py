@@ -45,10 +45,10 @@ class Project_Config(models.Model):
         db_table = 'opsmanage_project_config'
         default_permissions = ()
         permissions = (
-            ("project_read_project_config", "读取项目部署权限"),
-            ("project_change_project_config", "更改项目部署权限"),
-            ("project_add_project_config", "添加项目部署权限"),
-            ("project_delete_project_config", "删除项目部署权限"),
+            ("add_project_config", "添加项目部署权限"),
+            ("change_project_config", "更改项目部署权限"),
+            ("delete_project_config", "删除项目部署权限"),
+            ("read_project_config", "读取项目部署权限"),
         )
         unique_together = (("project_env", "project", "project_name"),)
         verbose_name = '项目发布管理'

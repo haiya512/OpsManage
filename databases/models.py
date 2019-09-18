@@ -36,15 +36,15 @@ class DataBase_Server_Config(models.Model):
         db_table = 'opsmanage_database_server_config'
         default_permissions = ()
         permissions = (
-            ("database_read_database_server_config", "读取数据库信息表权限"),
-            ("database_change_database_server_config", "更改数据库信息表权限"),
-            ("database_add_database_server_config", "添加数据库信息表权限"),
-            ("database_delete_database_server_config", "删除数据库信息表权限"),     
-            ("database_query_database_server_config", "数据库查询查询权限"), 
-			("databases_dml_database_server_config", "数据库执行DML语句权限"), 
-            ("database_binlog_database_server_config", "数据库Binglog解析权限"),        
-            ("database_schema_database_server_config", "数据库表结构查询权限"),
-            ("database_optimize_database_server_config", "数据库SQL优化建议权限"),
+            ("add_database_server_config", "添加数据库信息表权限"),
+            ("change_database_server_config", "更改数据库信息表权限"),
+            ("delete_database_server_config", "删除数据库信息表权限"),
+            ("read_database_server_config", "读取数据库信息表权限"),
+            ("query_database_server_config", "数据库查询查询权限"),
+            ("dml_database_server_config", "数据库执行DML语句权限"),
+            ("binlog_database_server_config", "数据库Binglog解析权限"),
+            ("schema_database_server_config", "数据库表结构查询权限"),
+            ("optimize_database_server_config", "数据库SQL优化建议权限"),
         )
         unique_together = (("db_port", "db_assets","db_env","db_name"))
         verbose_name = '数据库管理'  
@@ -117,12 +117,10 @@ class Custom_High_Risk_SQL(models.Model):
         db_table = 'opsmanage_custom_high_risk_sql'
         default_permissions = ()
         permissions = (
-            ("database_read_custom_high_risk_sql", "读取高危SQL表权限"),
-            ("database_change_custom_high_risk_sql", "更改高危SQL表权限"),
-            ("database_add_custom_high_risk_sql", "添加高危SQL表权限"),
-            ("database_delete_custom_high_risk_sql", "删除高危SQL表权限"),              
+            ("add_custom_high_risk_sql", "添加高危SQL表权限"),
+            ("change_custom_high_risk_sql", "更改高危SQL表权限"),
+            ("delete_custom_high_risk_sql", "删除高危SQL表权限"),
+            ("read_custom_high_risk_sql", "读取高危SQL表权限"),
         )
         verbose_name = '数据库管理'   
         verbose_name_plural = '自定义高危SQL表' 
-        
-        
