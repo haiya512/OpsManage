@@ -11,7 +11,6 @@ from dao.assets import AssetsSource
 from utils.ansible.runner import ANSRunner
 
 
-
 class DeployRunner(AssetsSource):
     dir_release, dir_webroot,exclude = None, None, None
     version_package, release_version = None, None
@@ -218,9 +217,9 @@ class DeployRunner(AssetsSource):
         
     def release(self,package=None):
         if package:
-            args = "src={srcDir} dest={desDir}".format(srcDir=package, desDir=self.apps.project_target_root)
+            args = "src={srcDir} dest={desDir} mode=755 owner={owner}".format(srcDir=package, desDir=self.apps.project_target_root,owner=self.apps.project_user)
         else:
-            args = "src={srcDir} dest={desDir}".format(srcDir=self.apps.project_dir+self.version_package, desDir=self.apps.project_target_root)
+            args = "src={srcDir} dest={desDir} mode=755 owner={owner}".format(srcDir=self.apps.project_dir+self.version_package, desDir=self.apps.project_target_root,owner=self.apps.project_user)
         hostList, resource = self.idSourceList(ids=self.task.servers)
         ansRbt = ANSRunner(resource)
 #         print(list(set(hostList).difference(set(self.flist))))

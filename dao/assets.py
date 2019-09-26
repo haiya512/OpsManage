@@ -21,22 +21,22 @@ class AssetsBusiness(object):
     def __init__(self):
         super(AssetsBusiness, self).__init__()
 
-    def get_node_json_assets(self,business):
+    def get_node_json_assets(self, business):
         dataList = []
         for ds in business.assets_set.all():
             dataList.append(ds.to_json())
         return dataList
 
-    def get_assets(self,business):
+    def get_assets(self, business):
         return business.assets_set.all()
 
-    def get_nodes_all_children(self,tree_id,lft,rght):
-        return Business_Tree_Assets.objects.filter(tree_id=tree_id,lft__gt=lft,rght__lt=rght)
+    def get_nodes_all_children(self, tree_id, lft, rght):
+        return Business_Tree_Assets.objects.filter(tree_id=tree_id, lft__gt=lft, rght__lt=rght)
 
-    def get_node_unallocated_json_assets(self,business):
+    def get_node_unallocated_json_assets(self, business):
         dataList = []
         for ds in Assets.objects.filter(~Q(business_tree=business)):
-        # for ds in Assets.objects.filter(business_tree__isnull=True):
+            # for ds in Assets.objects.filter(business_tree__isnull=True):
             dataList.append(ds.to_json())
         return dataList
 
@@ -134,7 +134,7 @@ class AssetsBase(DataHandle):
                 "manufacturerList": self.manufacturerList(), "modelList": self.modelList(),
                 "providerList": self.providerList(), "cpuList": self.cpuList(),
                 "systemList": self.systemList(), "kernelList": self.kernelList(),
-                "tagsList": self.tagsList(), "zoneList":self.zoneList()
+                "tagsList": self.tagsList(), "zoneList": self.zoneList()
                 }
 
     def assets(self, id):
@@ -230,13 +230,15 @@ class AssetsBase(DataHandle):
             if hasattr(assets, 'server_assets'):
                 try:
                     dataList.append(
-                        {"id": assets.id, "ip": assets.server_assets.ip, })  # "project": project, "service": service, "status": assets.status, "mark": assets.mark})
+                        {"id": assets.id,
+                         "ip": assets.server_assets.ip, })  # "project": project, "service": service, "status": assets.status, "mark": assets.mark})
                 except Exception as ex:
                     logger.warn(msg="id:{assets}, error:{ex}".format(assets=assets.id, ex=ex))
             elif hasattr(assets, 'network_assets'):
                 try:
                     dataList.append(
-                        {"id": assets.id, "ip": assets.network_assets.ip, }) #"project": project, "service": service, "status": assets.status, "mark": assets.mark})
+                        {"id": assets.id,
+                         "ip": assets.network_assets.ip, })  # "project": project, "service": service, "status": assets.status, "mark": assets.mark})
                 except Exception as ex:
                     logger.warn(msg="id:{assets}, error:{ex}".format(assets=assets.id, ex=ex))
         return dataList
@@ -357,31 +359,31 @@ class AssetsBase(DataHandle):
                 'status': int(data[10]),
                 'put_zone': int(data[11]),
                 'group': int(data[12]),
-                'project': int(data[13]),
-                'business': int(data[14]),
+                # 'project': int(data[13]),
+                # 'business': int(data[14]),
             }
             if data[3]: assets['buy_time'] = xlrd.xldate.xldate_as_datetime(data[3], 0)
             if data[4]: assets['expire_date'] = xlrd.xldate.xldate_as_datetime(data[4], 0)
             if assets.get('assets_type') in ['vmser', 'server']:
                 server_assets = {
-                    'ip': data[15],
-                    'keyfile': data[16],
-                    'username': data[17],
-                    'passwd': data[18],
-                    'hostname': data[19],
-                    'port': data[20],
-                    'raid': data[21],
-                    'line': data[22],
+                    'ip': data[13],
+                    'keyfile': data[14],
+                    'username': data[15],
+                    'passwd': data[16],
+                    'hostname': data[17],
+                    'port': data[18],
+                    'raid': data[19],
+                    'line': data[20],
                 }
             else:
                 net_assets = {
-                    'ip': data[15],
-                    'bandwidth': data[16],
-                    'port_number': data[17],
-                    'firmware': data[18],
-                    'cpu': data[19],
-                    'stone': data[20],
-                    'configure_detail': data[21]
+                    'ip': data[13],
+                    'bandwidth': data[14],
+                    'port_number': data[15],
+                    'firmware': data[16],
+                    'cpu': data[17],
+                    'stone': data[18],
+                    'configure_detail': data[19]
                 }
             count = Assets.objects.filter(name=assets.get('name')).count()
             if count == 1:
@@ -687,7 +689,7 @@ class AssetsSource(object):
                     data["username"] = assets.server_assets.username
                     data["hostname"] = assets.server_assets.ip
                     if assets.server_assets.keyfile == 0:
-                        data["password"] =  assets.server_assets.passwd
+                        data["password"] = assets.server_assets.passwd
                     elif assets.server_assets.keyfile_path:
                         data["private_key"] = assets.server_assets.keyfile_path
                 except Exception as ex:
@@ -1065,7 +1067,8 @@ class AssetsAnsible(DataHandle):
                     data["username"] = assets.server_assets.username
                     data["hostname"] = assets.server_assets.ip
                     data["sudo_passwd"] = assets.server_assets.sudo_passwd
-                    if assets.server_assets.keyfile == 0:data["password"] =  assets.server_assets.passwd
+                    if assets.server_assets.keyfile == 0:
+                        data["password"] = assets.server_assets.passwd
                     elif assets.server_assets.keyfile_path:
                         data["private_key"] = assets.server_assets.keyfile_path
                 except Exception as ex:

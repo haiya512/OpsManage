@@ -232,7 +232,6 @@ function oBtProjectSelect(obj){
 		                    type: 'success',
 		                    styling: 'bootstrap3'
 		                });
-		            	$('#run_deploy_model').removeAttr("disabled");
 					}
 					else {
 		            	new PNotify({
@@ -241,7 +240,6 @@ function oBtProjectSelect(obj){
 		                    type: 'error',
 		                    styling: 'bootstrap3'
 		                });
-		            	$('#run_deploy_model').attr("disabled",true);
 					}
 						
 				},
@@ -250,7 +248,7 @@ function oBtProjectSelect(obj){
 }
 
 
-function AssetsTypeSelect(obj,model){ 
+/*function AssetsTypeSelect(obj,model){
 	   var index = obj.selectedIndex;
 	   var sId = obj.options[index].value; 
 	   if ( sId  > 0){	 
@@ -290,7 +288,7 @@ function AssetsTypeSelect(obj,model){
 				},
 			});	
 	   }
-}
+}*/
 
 $(document).ready(function() {
 	

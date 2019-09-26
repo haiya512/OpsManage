@@ -86,12 +86,12 @@ class Assets(models.Model):
 
         json_format = {
             "id": self.id,
-            "assets_type": self..assets_type_dicts[self.assets_type],
+            "assets_type": self.assets_type_dicts[self.assets_type],
             "name": self.name,
             "sn": self.sn,
             "buy_time": self.buy_time,
             "expire_date": self.expire_date,
-            "business": [ds.id for ds in self.business_tree.all()],
+            # "business": [ds.id for ds in self.business_tree.all()],
             "buy_user": self.get_buy_user(),
             "management_ip": self.management_ip,
             "manufacturer": self.manufacturer,
