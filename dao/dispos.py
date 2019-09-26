@@ -68,8 +68,7 @@ class DeployRecord(object):
 class DeployScript(DataHandle):   
     def __init__(self):
         super(DeployScript,self).__init__()    
-            
-        
+
     def script(self,ids):
         try:
             script = Deploy_Script.objects.get(id=ids)
@@ -78,14 +77,12 @@ class DeployScript(DataHandle):
         script_file = os.getcwd()  + str(script.script_file)
         content = ''
         if os.path.exists(script_file):
-            content = ''
             with open(script_file,"r") as f:
                 for line in f.readlines(): 
-                    content =  content + line 
+                    content += line
         script.script_contents = content
-        return  json.dumps(self.convert_to_dict(script))         
-       
-    
+        return json.dumps(self.convert_to_dict(script))
+
     def scriptList(self):
         dataList = []
         for ds in Deploy_Script.objects.all():
@@ -107,7 +104,7 @@ class DeployScript(DataHandle):
                                           script_file=fileName,
                                           script_user=request.user.id,
                                           script_inventory_groups=self.change(request.POST.get('inventory_groups')),
-                                          script_service=self.change(request.POST.get('service')),
+                                          script_business=self.change(request.POST.get('business')),
                                           script_type=request.POST.get('server_model')
                                           )
         except Exception as ex:
@@ -130,7 +127,7 @@ class DeployScript(DataHandle):
                                           script_args=QueryDict(request.body).get('script_args'),
                                           script_user=request.user.id,
                                           script_inventory_groups=self.change(QueryDict(request.body).get('inventory_groups')),
-                                          script_service=self.change(QueryDict(request.body).get('service')),
+                                          script_business=self.change(QueryDict(request.body).get('business')),
                                           script_type=QueryDict(request.body).get('server_model'),
                                           update_date = datetime.now()
                                           )
@@ -165,9 +162,8 @@ class DeployPlaybook(DataHandle):
                 for line in f.readlines(): 
                     content =  content + line 
         playbook.playbook_contents = content
-        return  json.dumps(self.convert_to_dict(playbook))         
-       
-    
+        return json.dumps(self.convert_to_dict(playbook))
+
     def playbookList(self):
         dataList = []
         for ds in Deploy_Playbook.objects.all():
@@ -189,7 +185,7 @@ class DeployPlaybook(DataHandle):
                                           playbook_file=fileName,
                                           playbook_user=request.user.id,
                                           playbook_inventory_groups=self.change(request.POST.get('inventory_groups')),
-                                          playbook_service=self.change(request.POST.get('service')),
+                                          playbook_business=self.change(request.POST.get('business')),
                                           playbook_type=request.POST.get('server_model')
                                           )
         except Exception as ex:
@@ -212,7 +208,7 @@ class DeployPlaybook(DataHandle):
                                           playbook_user=request.user.id,
                                           playbook_tags=QueryDict(request.body).get('tags'),
                                           playbook_inventory_groups=self.change(QueryDict(request.body).get('inventory_groups')),
-                                          playbook_service=self.change(QueryDict(request.body).get('service')),
+                                          playbook_business=self.change(QueryDict(request.body).get('business')),
                                           playbook_type=QueryDict(request.body).get('server_model'),
                                           playbook_vars=QueryDict(request.body).get('playbook_vars'),
                                           update_date = datetime.now()

@@ -3,6 +3,7 @@ function DynamicSelect(ids,value){
 		$(this).prop("selected",false);   
 	})
 	$("#" + ids +" option[value='" + value +"']").prop("selected",true);
+	console.log(ids,value)
 }
 
 function AssetsTypeSelect(model,ids){ 
@@ -77,6 +78,49 @@ function get_url_param(name) {
 	 if (r != null) return unescape(r[2]); return null; 
 }
 
+function makeProjectBusinessSelect(ids){
+	$.ajax({
+		async : true,
+		url:'/api/business/last/', //请求地址
+		type:"GET",  //提交类似
+		success:function(response){
+			var binlogHtml = '<select required="required" class="selectpicker form-control" data-live-search="true"  data-size="10" data-width="100%" name="project_business"  id="project_business" autocomplete="off">'
+			var selectHtml = '';
+			for (var i=0; i <response.length; i++){
+				if (ids==response[i]["id"]){
+					selectHtml += '<option selected="selected" value="'+ response[i]["id"] +'">'+ response[i]["paths"] +'</option>'
+				}else{
+					selectHtml += '<option value="'+ response[i]["id"] +'">'+ response[i]["paths"] +'</option>'
+				}
+
+			};
+			binlogHtml =  binlogHtml + selectHtml + '</select>';
+			$("#project_business").html(binlogHtml)
+			$("#project_business").selectpicker('refresh');
+			$("#project_business").attr('disabled',true)
+		}
+	});
+}
+
+function makeProjectBusinessAssets(businessId){
+	$.ajax({
+		async : false,
+		dataType: "JSON",
+		url:'/api/business/nodes/assets/'+ businessId + '/', //请求地址
+		type:"GET",  //提交类似
+		success:function(response){
+			var binlogHtml = '<select class="selectpicker" name="server" id="server" required><option  name="ipvs_assets" value="">请选择服务器</option>'
+			var selectHtml = '';
+			for (var i=0; i <response.length; i++){
+				 selectHtml += '<option name="server" value="'+ response[i]["id"] +'">' + response[i]["detail"]["ip"] + '</option>'
+			};
+			binlogHtml =  binlogHtml + selectHtml + '</select>';
+			$("#server").html(binlogHtml)
+			$('.selectpicker').selectpicker('refresh');
+		},
+	});
+}
+
 $(document).ready(function() {
 	
 	 $("#project_env").change(function(){
@@ -112,9 +156,8 @@ $(document).ready(function() {
 	if (project["code"]!=200){
 		 window.location.href="/404/";
 	}else{
-		AssetsTypeSelect("service",project["data"]["project_service"]) 
-		$("#deploy_project").val(project["data"]["project_id"]);
-		$("#deploy_service").val(project["data"]["service_name"]);
+		makeProjectBusinessSelect(project["data"]["project_business"])
+		makeProjectBusinessAssets(project["data"]["project_business"])
 		$("#project_name").val(project["data"]["project_name"]);
 		DynamicSelect('project_env',project["data"]["project_env"])
 		DynamicSelect('project_repertory',project["data"]["project_repertory"])
