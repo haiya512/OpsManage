@@ -1,5 +1,5 @@
 from django.conf.urls import url
-from api.views import (assets_api, deploy_api, db_api,
+from apps.api.views import (assets_api, deploy_api, db_api,
                        users_api, orders_api, cron_api,
                        celery_api, cicd_api, monitor_api,
                        nav_api, wiki_api, apscehd_api,
@@ -60,6 +60,10 @@ urlpatterns = [
     url(r'^sched/crontab/(?P<id>[0-9]+)/$', celery_api.celery_crontab_detail),
     url(r'^sched/tasks/$', celery_api.celery_task_list),
     url(r'^sched/tasks/(?P<id>[0-9]+)/$', celery_api.celery_task_detail),
+    url(r'^sched/celery/$', celery_api.celery_task_list),
+    url(r'^sched/celery/(?P<id>[0-9]+)/$', celery_api.celery_task_detail),
+    url(r'^sched/celery/result/$', celery_api.CeleryTaskResultList.as_view()),
+    url(r'^sched/celery/result/(?P<id>[0-9]+)/$', celery_api.celery_task_result_detail),
     url(r'^host/vars/(?P<id>[0-9]+)/$', deploy_api.deploy_host_vars),
     url(r'^db/config/$', db_api.db_list),
     url(r'^db/tree/$', db_api.db_tree),

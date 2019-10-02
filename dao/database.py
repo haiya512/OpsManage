@@ -1,17 +1,17 @@
 #!/usr/bin/env python  
 # _#_ coding:utf-8 _*_ 
 import os,json,queue,time
-from databases.models import *
+from apps.databases.models import *
 from utils.logger import logger
 from .assets import AssetsBase 
-from asset.models import *
+from apps.asset.models import *
 from django.http import QueryDict
-from datetime import datetime,timedelta,date
+from datetime import datetime
 from django.contrib.auth.models import User
 from dao.base import MySQLPool
 from utils import base
 from utils.mysql.binlog2sql import Binlog2sql
-from databases.tasks import record_exec_sql
+from apps.tasks.celery_sql import record_exec_sql
 from django.db.models import Count
 from mptt.templatetags.mptt_tags import cache_tree_children
 from django.db.models import Q
@@ -600,9 +600,9 @@ class DBManage(AssetsBase):
                 return False
        
         if isinstance(result, str):
-            record_exec_sql(request.user.username,dbServer,request.POST.get('sql'),time_consume,1,result)
+            record_exec_sql.apply_async((request.user.username,dbServer.id,request.POST.get('sql'),time_consume,1,result),queue='default')
         else:
-            record_exec_sql(request.user.username,dbServer,request.POST.get('sql'),time_consume,0)        
+            record_exec_sql.apply_async((request.user.username,dbServer.id,request.POST.get('sql'),time_consume,0),queue='default')
         
     def query_user_db(self,request=None):
         user_database_list = []

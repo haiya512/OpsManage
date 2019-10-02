@@ -136,7 +136,49 @@
                     </div>                     
                      <!-- CustomSql -->
                     <div role="tabpanel" class="tab-pane fade" id="tab_content4" aria-labelledby="#optimize">
+                    <div class="col-md-12 col-sm-12 col-xs-12">
+			                <div class="x_panel">
+			                  <div class="x_title">
+			                    <h2>任务结果 <small>Taks Result</small></h2>
+			                    <div class="clearfix"></div>
+			                  </div>
+			                  <div class="x_content">
+		                  		<div class="row">
+		                  			<div class="pull-left">
+		                  				<select required="required" class="selectpicker form-control"  data-size="10" data-selected-text-format="count > 5" data-live-search="true" data-width="100%"   autocomplete="off"  class="form-control" name="regTaskList"  id="regTaskList"  required>
+		                  					{% for ds in tasks.regTaskList %}
+												<option value="{{ds}}">{{ds}}</option>
+											{% endfor %}
+		                  				</select>
+		                  			</div>
+									<div class="btn-group  btn-group-sm pull-right">
+				                        <button class="btn btn-default" name="page_previous" type="button" value="">上一页</button>
+				                        <button class="btn btn-default" name="page_next" type="button" value="">下一页</button>
+			                      	</div>
 
+		                      	</div>
+		                      	<br>
+		                      	<div class="row">
+				                    <table class="table" id="celeryTaksResultsListTable">
+				                      <thead>
+				                        <tr>
+				                          <th>ID</th>
+				                          <th>Task Id</th>
+				                          <th>状态</th>
+				                          <th>任务名</th>
+				                          <th>任务参数</th>
+				                          <th>结束时间</th>
+				                          <th>执行结果</th>
+				                          <th class="text-center">操作</th>
+				                        </tr>
+				                      </thead>
+				                      <tbody>
+				                      </tbody>
+				                    </table>
+								</div>
+			                  </div>
+			                </div>
+			              </div>
                     </div>                         
                 </div>                                  
               </div>

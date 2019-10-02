@@ -2,8 +2,6 @@ var userInfo = {
     "0": {"username": "继承上级"}
 }
 
-var envInfo = {}
-
 var webssh = false
 function make_terminal(element, size, ws_url) {
     var term = new Terminal({
@@ -283,12 +281,6 @@ function RefreshTable(tableId, urlData) {
 function RefreshUserInfo(dataList) {
     for (var i = 0; i < dataList.length; i++) {
         userInfo[dataList[i]["id"]] = dataList[i]
-    }
-}
-
-function RefreshEnvInfo(dataList) {
-    for (var i = 0; i < dataList.length; i++) {
-        envInfo[dataList[i]["id"]] = dataList[i]
     }
 }
 
@@ -1049,8 +1041,6 @@ RefreshUserInfo(requests("get", "/api/user/"))
 
 var envDataList = requests('get', "/api/business/env/")
 
-RefreshEnvInfo(envDataList)
-
 $(document).ready(function () {
 
     function makeBusinessRnvTables(envDataList) {
@@ -1214,32 +1204,13 @@ $(document).ready(function () {
         var columns = [
             {"data": "id"},
             {"data": "text"},
-            {"data": "env"},
-            {"data": "manage"},
+            {"data": "env_name"},
+            {"data": "manage_name"},
             {"data": "group"},
             {"data": "paths"},
             {"data": "desc"}
         ]
         var columnDefs = [
-            {
-                targets: [2],
-                render: function (data, type, row, meta) {
-                    if (row.env) {
-                        return envInfo[row.env]["name"]
-                    } else {
-                        return "未设置"
-                    }
-
-                },
-                "className": "text-center",
-            },
-            {
-                targets: [3],
-                render: function (data, type, row, meta) {
-                    return userInfo[row.manage]["username"]
-                },
-                "className": "text-center",
-            },
             {
                 targets: [7],
                 render: function (data, type, row, meta) {

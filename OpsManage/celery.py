@@ -1,7 +1,6 @@
 # coding:utf-8
 from __future__ import absolute_import, unicode_literals
 import os, django
-from celery import Celery, platforms
 from django.conf import settings
 from kombu import Queue, Exchange
 from OpsManage.settings import config

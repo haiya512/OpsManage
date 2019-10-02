@@ -1,18 +1,19 @@
 # !/usr/bin/env python
 # _#_ coding:utf-8 _*_  
 from rest_framework import serializers
-from asset.models import *
-from databases.models import *
-from deploy.models import *
-from orders.models import *
+from apps.asset.models import *
+from apps.databases.models import *
+from apps.deploy.models import *
+from apps.orders.models import *
 from sched.models import *
-from cicd.models import *
-from navbar.models import *
-from wiki.models import *
-from orders.models import *
-from apply.models import *
+from apps.cicd.models import *
+from apps.navbar.models import *
+from apps.wiki.models import *
+from apps.orders.models import *
+from apps.apply.models import *
 from django.contrib.auth.models import Group, User
 from django_celery_beat.models import CrontabSchedule, IntervalSchedule, PeriodicTask
+from django_celery_results.models import TaskResult
 from rest_framework.pagination import CursorPagination
 
 
@@ -45,10 +46,24 @@ class BusinessTreeSerializer(serializers.ModelSerializer):
     paths = serializers.SerializerMethodField(read_only=True, required=False)
     icon = serializers.SerializerMethodField(read_only=True, required=False)
     last_node = serializers.SerializerMethodField(read_only=True, required=False)
+    manage_name = serializers.SerializerMethodField(read_only=True,required=False)
+    env_name = serializers.SerializerMethodField(read_only=True,required=False)
 
     class Meta:
         model = Business_Tree_Assets
-        fields = ('id', 'text', 'env', 'manage', 'parent', 'group', 'desc', 'icon', 'paths', 'last_node', 'tree_id')
+        fields = ('id','text','env','env_name','manage','manage_name','parent','group','desc','icon','paths','last_node','tree_id')
+
+    def get_env_name(self,obj):
+        try:
+            return Business_Env_Assets.objects.get(id=obj.env).name
+        except:
+            return "未知"
+
+    def get_manage_name(self,obj):
+        try:
+            return User.objects.get(id=obj.manage).username
+        except:
+            return "未知"
 
     def get_paths(self, obj):
         return obj.node_path()
@@ -341,6 +356,14 @@ class PeriodicTaskSerializer(serializers.ModelSerializer):
         model = PeriodicTask
         fields = ('id', 'name', 'task', 'kwargs', 'last_run_at', 'total_run_count',
                   'enabled', 'queue', 'crontab', 'interval', 'args', 'expires')
+
+
+class TaskResultSerializer(serializers.ModelSerializer):
+    date_done = serializers.DateTimeField(format="%Y-%m-%d %H:%M:%S")
+    class  Meta:
+        model = TaskResult
+        fields = ('id','task_id', 'status', 'task_name','task_kwargs','date_done',
+                  'result','date_done')
 
 
 class CronSerializer(serializers.ModelSerializer):

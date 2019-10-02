@@ -2,9 +2,6 @@
 # _#_ coding:utf-8 _*_ 
 import time
 from celery import task
-    
-
-@task
-def debug_task():
-    print(time.time())
-    return time.time()    
+from utils import base
+from asset.models import Assets
+from django.contrib.auth.models import User
