@@ -46,20 +46,21 @@ class BusinessTreeSerializer(serializers.ModelSerializer):
     paths = serializers.SerializerMethodField(read_only=True, required=False)
     icon = serializers.SerializerMethodField(read_only=True, required=False)
     last_node = serializers.SerializerMethodField(read_only=True, required=False)
-    manage_name = serializers.SerializerMethodField(read_only=True,required=False)
-    env_name = serializers.SerializerMethodField(read_only=True,required=False)
+    manage_name = serializers.SerializerMethodField(read_only=True, required=False)
+    env_name = serializers.SerializerMethodField(read_only=True, required=False)
 
     class Meta:
         model = Business_Tree_Assets
-        fields = ('id','text','env','env_name','manage','manage_name','parent','group','desc','icon','paths','last_node','tree_id')
+        fields = ('id', 'text', 'env', 'env_name', 'manage', 'manage_name', 'parent', 'group', 'desc', 'icon', 'paths',
+                  'last_node', 'tree_id')
 
-    def get_env_name(self,obj):
+    def get_env_name(self, obj):
         try:
             return Business_Env_Assets.objects.get(id=obj.env).name
         except:
             return "未知"
 
-    def get_manage_name(self,obj):
+    def get_manage_name(self, obj):
         try:
             return User.objects.get(id=obj.manage).username
         except:
@@ -105,8 +106,8 @@ class IdcSerializer(serializers.ModelSerializer):
     class Meta:
         model = Idc_Assets
         fields = (
-        'id', 'zone_name', 'idc_name', 'idc_bandwidth', 'idc_linkman', 'idc_phone', 'idc_address', 'idc_network',
-        'idc_operator', 'idc_desc', 'cabinet_assets')
+            'id', 'zone_name', 'idc_name', 'idc_bandwidth', 'idc_linkman', 'idc_phone', 'idc_address', 'idc_network',
+            'idc_operator', 'idc_desc', 'cabinet_assets')
 
     def create(self, validated_data):
         return Idc_Assets.objects.create(zone=self.context["zone"], **validated_data)
@@ -120,7 +121,7 @@ class IdleAssetsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Idle_Assets
         fields = (
-        'id', 'idc_name', 'idle_name', 'idle_number', 'idle_user', 'idle_desc', 'update_time', 'idle_username')
+            'id', 'idc_name', 'idle_name', 'idle_number', 'idle_user', 'idle_desc', 'update_time', 'idle_username')
 
     def create(self, validated_data):
         return Idle_Assets.objects.create(idc=self.context["idc"], **validated_data)
@@ -271,12 +272,21 @@ class DataBaseServerSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = DataBase_Server_Config
-        fields = ('id', 'db_env', 'db_name', 'db_assets_id',
+        fields = ('id', 'db_env', 'db_version', 'db_assets_id',
                   'db_user', 'db_port', 'db_mark', 'db_type',
                   "db_mode", "db_business", "db_rw", "detail")
 
     def get_detail(self, obj):
         return obj.to_json()
+
+
+class DatabaseSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Database_Detail
+        fields = ('id','db_name','db_size')
+
+    def create(self,  validated_data):
+        return Database_Detail.objects.create(db_server=self.context["db_server"], **validated_data)
 
 
 class CustomSQLSerializer(serializers.ModelSerializer):
@@ -294,25 +304,15 @@ class HistroySQLSerializer(serializers.ModelSerializer):
     class Meta:
         model = SQL_Execute_Histroy
         fields = (
-        'id', 'exe_sql', 'exe_user', 'exec_status', 'exe_result', 'db_host', 'db_name', 'create_time', 'db_env',
-        'exe_db', "exe_time")
+            'id', 'exe_sql', 'exe_user', 'exec_status', 'exe_result', 'db_host', 'db_name', 'create_time', 'db_env',
+            'exe_db', "exe_time")
 
     def get_db_env(self, obj):
-        if obj.exe_db.db_env == 'alpha':
-            return "开发环境"
-
-        elif obj.exe_db.db_env == 'beta':
-            return "测试环境"
-
-        elif obj.exe_db.db_env == "ga":
-            return "生产环境"
-
-        else:
-            return "未知"
+        return obj.exe_db.db_server.dataMap["env"][obj.exe_db.db_server.db_env]
 
     def get_db_host(self, obj):
         try:
-            return obj.exe_db.db_assets.server_assets.ip
+            return obj.exe_db.db_server.db_assets.server_assets.ip
         except:
             return "未知"
 
@@ -360,10 +360,11 @@ class PeriodicTaskSerializer(serializers.ModelSerializer):
 
 class TaskResultSerializer(serializers.ModelSerializer):
     date_done = serializers.DateTimeField(format="%Y-%m-%d %H:%M:%S")
-    class  Meta:
+
+    class Meta:
         model = TaskResult
-        fields = ('id','task_id', 'status', 'task_name','task_kwargs','date_done',
-                  'result','date_done')
+        fields = ('id', 'task_id', 'status', 'task_name', 'task_kwargs', 'date_done',
+                  'result', 'date_done')
 
 
 class CronSerializer(serializers.ModelSerializer):
@@ -442,11 +443,11 @@ class AppsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Project_Config
         fields = (
-        'id', 'project_env', 'project_business_paths', 'project_name', 'project_type', 'project_local_command',
-        'project_repo_dir',
-        'project_exclude', 'project_address', 'project_uuid', 'project_repo_user', 'project_repo_passwd',
-        'project_repertory', 'project_status', 'project_remote_command', 'project_user', 'project_model',
-        'project_business', "project_pre_remote_command")
+            'id', 'project_env', 'project_business_paths', 'project_name', 'project_type', 'project_local_command',
+            'project_repo_dir',
+            'project_exclude', 'project_address', 'project_uuid', 'project_repo_user', 'project_repo_passwd',
+            'project_repertory', 'project_status', 'project_remote_command', 'project_user', 'project_model',
+            'project_business', "project_pre_remote_command")
 
     def get_project_business_paths(self, obj):
         return obj.business_paths()
@@ -468,8 +469,8 @@ class AppsLogsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Log_Project_Config
         fields = (
-        'id', 'project_name', 'username', 'package', 'status', 'project_env', 'create_time', 'type', 'task_id',
-        'git_version')
+            'id', 'project_name', 'username', 'package', 'status', 'project_env', 'create_time', 'type', 'task_id',
+            'git_version')
 
     def get_package(self, obj):
         try:
@@ -562,8 +563,9 @@ class IPVSSerializer(serializers.ModelSerializer):
     class Meta:
         model = IPVS_CONFIG
         fields = (
-        'id', 'vip', 'port', 'scheduler', 'sip', 'rs_count', 'persistence', 'business', 'business_paths', 'protocol',
-        'line', 'desc', 'is_active', 'ipvs_assets')
+            'id', 'vip', 'port', 'scheduler', 'sip', 'rs_count', 'persistence', 'business', 'business_paths',
+            'protocol',
+            'line', 'desc', 'is_active', 'ipvs_assets')
 
         extra_kwargs = {
             'ipvs_assets': {'required': False},

@@ -67,7 +67,7 @@ function setAceEditMode(ids,model,theme) {
 		    		"bScrollCollapse": false,
 		    	    "bRetrieve": true,
 		    		"destroy": true,
-		    		"data":	dataList["results"],
+		    		"data":	dataList,
 		    		"columns": columns,
 		    		"columnDefs" :columnDefs,
 		    		"language" : language,
@@ -79,17 +79,6 @@ function setAceEditMode(ids,model,theme) {
 		    		"order": [[ 0, "ase" ]],
 		    		"autoWidth": false
 		    	});
-
-	    if (dataList['next']){
-	    	  $("button[name='db_page_next']").attr("disabled", false).val(dataList['next']);
-	      }else{
-	    	  $("button[name='db_page_next']").attr("disabled", true).val();
-	      }
-	      if (dataList['previous']){
-	    	  $("button[name='db_page_previous']").attr("disabled", false).val(dataList['previous']);
-	      }else{
-	    	  $("button[name='db_page_previous']").attr("disabled", true).val();
-	      }
 	}
 
 	function RefreshTable(tableId, urlData){
@@ -100,39 +89,29 @@ function setAceEditMode(ids,model,theme) {
 
 	    table.fnClearTable(this);
 
-	    for (var i=0; i<dataList["results"].length; i++)
+	    for (var i=0; i<dataList.length; i++)
 	    {
-	      table.oApi._fnAddData(oSettings, dataList["results"][i]);
+	      table.oApi._fnAddData(oSettings, dataList[i]);
 	    }
 
 	    oSettings.aiDisplay = oSettings.aiDisplayMaster.slice();
 	    table.fnDraw();
-
-	    if (dataList['next']){
-	    	  $("button[name='db_page_next']").attr("disabled", false).val(dataList['next']);
-	      }else{
-	    	  $("button[name='db_page_next']").attr("disabled", true).val();
-	      }
-	      if (dataList['previous']){
-	    	  $("button[name='db_page_previous']").attr("disabled", false).val(dataList['previous']);
-	      }else{
-	    	  $("button[name='db_page_previous']").attr("disabled", true).val();
-	      }
 	  });
 }
 	function makeDbQueryTableList(dataList) {
 		var columns = [
-			{"data": "detail.db_env"},
-			{"data": "detail.db_business_paths"},
-			{"data": "detail.db_name"},
-			{"data": "detail.db_mode"},
-			{"data": "detail.db_type"},
-			{"data": "detail.db_mark"},
-			{"data": "detail.db_rw"},
+			{"data": "db_mark"},
+			{
+			   "data": "db_name",
+			   "defaultContent": ""
+			},
+			{"data": "ip"},
+			{"data": "db_port"},
+			{"data": "db_rw"}
 		]
 		var columnDefs = [
 			{
-				targets: [7],
+				targets: [5],
 				render: function (data, type, row, meta) {
 					return '<div class="btn-group  btn-group-xs">' +
 						'<button type="button" name="btn-database-query" value="' + row.id + '" class="btn btn-default"  aria-label="Justify"><span class="glyphicon glyphicon glyphicon-zoom-in" aria-hidden="true"></span>' +
@@ -155,7 +134,8 @@ function customMenu(node) {
 
 
 function drawTree(ids,url){
-    $(ids).jstree({	
+	$(ids).jstree('destroy');
+	$(ids).jstree({
 	    "core" : {
 	      "check_callback": function (op, node, par, pos, more) {  	  
 	    	    if (op === "move_node" || op === "copy_node") {
@@ -178,7 +158,8 @@ function drawTree(ids,url){
 }
 
 	function drawTableTree(ids,jsonData){
-    $(ids).jstree({
+		$(ids).jstree('destroy');
+		$(ids).jstree({
 	    "core" : {
 	      "check_callback": function (op, node, par, pos, more) {
 	    	    if (op === "move_node" || op === "copy_node") {
@@ -222,21 +203,18 @@ $(document).ready(function () {
 	}		
 
 	if ($("#UserDatabaseListTable").length) {
-    	let dataList = requests('get','/api/db/query/',{})
-    	makeDbQueryTableList(dataList)
-
     	$('#UserDatabaseListTable tbody').on('click',"button[name='btn-database-query']",function(){
-        	var vIds = $(this).val();
-        	var td = $(this).parent().parent().parent().find("td")
-			$("#dbChoice").html('<i  class="fa  fa-paper-plane" >'+ td.eq(1).text()+' 数据库  <u class="red">'+ td.eq(2).text() +'</u>查询</i>')
+        	let vIds = $(this).val();
+        	let td = $(this).parent().parent().parent().find("td")
+        	$("#dbChoice").html('<i  class="fa  fa-paper-plane" >数据库  <u class="red">'+ td.eq(1).text() +'</u> 查询入口</i>')
 			$("#db_query_btn").removeClass("disabled").text("查询").val(vIds)
         });
 
     	$('#UserDatabaseListTable tbody').on('click',"button[name='btn-database-table']",function(){
         	let vIds = $(this).val();
         	let td = $(this).parent().parent().parent().find("td")
-        	$("#dbTables").html('<i  class="fa  fa-paper-plane" >'+ td.eq(1).text()+' 数据库  <u class="red">'+ td.eq(2).text() +'</u>表结构</i>')
-        	let dbname = td.eq(2).text()
+        	$("#dbTables").html('<i  class="fa  fa-paper-plane" >数据库  <u class="red">'+ td.eq(1).text() +'</u> 表结构</i>')
+        	let dbname = td.eq(1).text()
         	var jsonData = {
                 "id": 1,
                 "text": dbname,
@@ -289,7 +267,7 @@ $(document).ready(function () {
 
     }
 
-	drawTree('#dbTree',"/api/db/tree/")
+	drawTree('#dbTree',"/api/db/tree/?db_rw=r/w&db_rw=read")
 
     $("#search-input").keyup(function () {
         var searchString = $(this).val();
@@ -302,7 +280,7 @@ $(document).ready(function () {
 	     if(select_node["last_node"] == 1){
 				$.ajax({
 					  type: 'GET',
-					  url: '/api/db/query/?db_business='+ select_node["id"],
+					  url: '/api/db/user/'+select_node["user_id"]+'/server/'+select_node["db_server"]+'/list/',
 				      success:function(response){
 				    	  if ($('#UserDatabaseListTable').hasClass('dataTable')) {
 				            dttable = $('#UserDatabaseListTable').dataTable();
