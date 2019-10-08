@@ -23,13 +23,6 @@ class OrderApply(LoginRequiredMixin, ApplyManage, View):
         if isinstance(res, str): return JsonResponse({'msg': res, "code": 500, 'data': []})
         return JsonResponse({'msg': "操作成功", "code": 200, 'data': res})
 
-    # class OrderConfig(LoginRequiredMixin,View):
-
-
-# login_url = '/login/'
-#     def get(self, request, *args, **kwagrs):
-#         return render(request,'orders/order_config.html',{"user":request.user})  
-
 
 class OrderLists(LoginRequiredMixin, View):
     login_url = '/login/'

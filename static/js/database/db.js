@@ -1147,7 +1147,7 @@ $(document).ready(function() {
 		let uid = $('#user :selected').val()
 		if(uid.length){
 			$("#db_server_db").empty();
-			let dataList = requests('get',"/api/db/user/"+uid+"/list/")
+			let dataList = requests('get',"/api/db/user/list/")
 			if ($('#user_database_list').hasClass('dataTable')) {
 		        dttable = $('#user_database_list').dataTable();
 		        dttable.fnClearTable();
