@@ -384,14 +384,14 @@ class ApplyManage(DataHandle):
                     return result.get('data')
 
             elif request.POST.get("sql_type") == "file":
-                order_sql = self.__create_orders_sql_file(config, request)
+                order_sql = self.__create_orders_sql_file(db, request)
                 if isinstance(order_sql, SQL_Audit_Order):
                     return
                 else:
                     return order_sql
 
             elif request.POST.get("sql_type") == "human":
-                order_sql = self.__create_orders_sql_human(config, request)
+                order_sql = self.__create_orders_sql_human(db, request)
                 if isinstance(order_sql, SQL_Audit_Order):
                     return
                 else:
