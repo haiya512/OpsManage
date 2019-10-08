@@ -1,3 +1,29 @@
+
+var language =  {
+		"sProcessing" : "处理中...",
+		"sLengthMenu" : "显示 _MENU_ 项结果",
+		"sZeroRecords" : "没有匹配结果",
+		"sInfo" : "显示第 _START_ 至 _END_ 项结果，共 _TOTAL_ 项",
+		"sInfoEmpty" : "显示第 0 至 0 项结果，共 0 项",
+		"sInfoFiltered" : "(由 _MAX_ 项结果过滤)",
+		"sInfoPostFix" : "",
+		"sSearch" : "搜索: ",
+		"sUrl" : "",
+		"sEmptyTable" : "表中数据为空",
+		"sLoadingRecords" : "载入中...",
+		"sInfoThousands" : ",",
+		"oPaginate" : {
+			"sFirst" : "首页",
+			"sPrevious" : "上页",
+			"sNext" : "下页",
+			"sLast" : "末页"
+		},
+		"oAria" : {
+			"sSortAscending" : ": 以升序排列此列",
+			"sSortDescending" : ": 以降序排列此列"
+		}
+	}
+
 function isJsonString(str) {
       	try {
             if (typeof JSON.parse(str) == "object") {
@@ -84,7 +110,7 @@ function AssetsSelect(name,dataList,selectIds){
 		if(dataList[i][name+"_name"]){
 			var text = dataList[i][name+"_name"]
 		}else if(name=="custom"){
-			var text = dataList[i]["detail"]["ip"]
+			var text = dataList[i]["detail"]["ip"]	
 		}else if(name=="business"){
 			var text = dataList[i]["paths"]
 		}
@@ -224,46 +250,6 @@ function oBtProjectSelect(obj){
 					var sHtml = '';
 					for (var i=0; i <response.length; i++){
 						sHtml += '<br>' + response[i]["detail"]["ip"]
-					};
-					if ( sHtml.length > 0){
-		            	new PNotify({
-		                    title: "<strong>发现主机:</strong>",
-		                    text: sHtml,
-		                    type: 'success',
-		                    styling: 'bootstrap3'
-		                });
-					}
-					else {
-		            	new PNotify({
-		                    title: "<strong>Ops：</strong>",
-		                    text: "该条件下未发现主机资源~",
-		                    type: 'error',
-		                    styling: 'bootstrap3'
-		                });
-					}
-						
-				},
-			});	
-	   }
-}
-
-
-/*function AssetsTypeSelect(obj,model){
-	   var index = obj.selectedIndex;
-	   var sId = obj.options[index].value; 
-	   if ( sId  > 0){	 
-			$.ajax({
-				dataType: "JSON",
-				url:'/assets/server/query/', //请求地址
-				type:"POST",  //提交类似
-				data:{
-					"query":model,
-					"id":sId
-				},
-				success:function(response){
-					var sHtml = '';
-					for (var i=0; i <response["data"].length; i++){
-						sHtml += '<br>' + response["data"][i]["ip"]
 					};  
 					if ( sHtml.length > 0){
 		            	new PNotify({
@@ -272,7 +258,6 @@ function oBtProjectSelect(obj){
 		                    type: 'success',
 		                    styling: 'bootstrap3'
 		                }); 	
-		            	$('#run_deploy_model').removeAttr("disabled");
 					}
 					else {
 		            	new PNotify({
@@ -281,14 +266,182 @@ function oBtProjectSelect(obj){
 		                    type: 'error',
 		                    styling: 'bootstrap3'
 		                }); 	
-		            	$('#run_deploy_model').attr("disabled",true);
-					}
-				
-						
+					}						
 				},
 			});	
 	   }
-}*/
+}
+
+function InitScriptDataTable(tableId,url,buttons,columns,columnDefs){
+	  var data = requests('get',url)
+	  oOverviewTable =$('#'+tableId).dataTable(
+			  {
+				  	"dom": "Bfrtip",
+				  	"buttons":buttons,
+		    		"bScrollCollapse": false, 				
+		    	    "bRetrieve": true,	
+		    		"destroy": true, 
+		    		"data":	data['results'],
+		    		"columns": columns,
+		    		"columnDefs" :columnDefs,			  
+		    		"language" : language,
+		    		"order": [[ 0, "ase" ]],
+		    		"autoWidth": false	    			
+		    	});
+	  if (data['next']){
+		  $("button[name='script_page_next']").attr("disabled", false).val(data['next']);	
+	  }else{
+		  $("button[name='script_page_next']").attr("disabled", true).val();
+	  }
+	  if (data['previous']){
+		  $("button[name='script_page_previous']").attr("disabled", false).val(data['next']);	
+	  }else{
+		  $("button[name='script_page_previous']").attr("disabled", true).val();
+	  }
+	    
+	  
+}
+
+function RefreshScriptTable(tableId, urlData){
+  $.getJSON(urlData, null, function( dataList ){
+  table = $('#'+tableId).dataTable();
+  oSettings = table.fnSettings();
+  
+  table.fnClearTable(this);
+
+  for (var i=0; i<dataList['results'].length; i++)
+  {
+    table.oApi._fnAddData(oSettings, dataList['results'][i]);
+  }
+
+  oSettings.aiDisplay = oSettings.aiDisplayMaster.slice();
+  table.fnDraw();
+  
+  if (dataList['next']){
+	  $("button[name='script_page_next']").attr("disabled", false).val(dataList['next']);	
+  }else{
+	  $("button[name='script_page_next']").attr("disabled", true).val();
+  }
+  if (dataList['previous']){
+	  $("button[name='script_page_previous']").attr("disabled", false).val(dataList['previous']);	
+  }else{
+	  $("button[name='script_page_previous']").attr("disabled", true).val();
+  } 
+     
+});	
+}
+
+function InitPlaybookDataTable(tableId,url,buttons,columns,columnDefs){
+	  var data = requests('get',url)
+	  oOverviewTable =$('#'+tableId).dataTable(
+			  {
+				  	"dom": "Bfrtip",
+				  	"buttons":buttons,
+		    		"bScrollCollapse": false, 				
+		    	    "bRetrieve": true,	
+		    		"destroy": true, 
+		    		"data":	data['results'],
+		    		"columns": columns,
+		    		"columnDefs" :columnDefs,			  
+		    		"language" : language,
+		    		"order": [[ 0, "ase" ]],
+		    		"autoWidth": false	    			
+		    	});
+	  if (data['next']){
+		  $("button[name='playbook_page_next']").attr("disabled", false).val(data['next']);	
+	  }else{
+		  $("button[name='playbook_page_next']").attr("disabled", true).val();
+	  }
+	  if (data['previous']){
+		  $("button[name='playbook_page_previous']").attr("disabled", false).val(data['next']);	
+	  }else{
+		  $("button[name='playbook_page_previous']").attr("disabled", true).val();
+	  }
+	    
+	  
+}
+
+function RefreshPlaybookTable(tableId, urlData){
+  $.getJSON(urlData, null, function( dataList ){
+  table = $('#'+tableId).dataTable();
+  oSettings = table.fnSettings();
+  
+  table.fnClearTable(this);
+
+  for (var i=0; i<dataList['results'].length; i++)
+  {
+    table.oApi._fnAddData(oSettings, dataList['results'][i]);
+  }
+
+  oSettings.aiDisplay = oSettings.aiDisplayMaster.slice();
+  table.fnDraw();
+  
+  if (dataList['next']){
+	  $("button[name='playbook_page_next']").attr("disabled", false).val(dataList['next']);	
+  }else{
+	  $("button[name='playbook_page_next']").attr("disabled", true).val();
+  }
+  if (dataList['previous']){
+	  $("button[name='playbook_page_previous']").attr("disabled", false).val(dataList['previous']);	
+  }else{
+	  $("button[name='playbook_page_previous']").attr("disabled", true).val();
+  } 
+     
+});	
+}
+
+function makeDeployScripts() {
+    var columns = [                  
+                   {"data": "id"},
+                   {"data": "detail.script_name"},
+                   {"data": "detail.script_user"},
+                   {"data": "detail.create_time"},
+                   {"data": "detail.update_date"},
+	               ]
+   var columnDefs = [                     
+	    		        {
+   	    				targets: [5],
+   	    				render: function(data, type, row, meta) {  	    					
+   	                        return '<div class="btn-group  btn-group-sm">' +		    	                           
+	    	                           '<button type="button" name="btn-script-edit" value="'+ row.id +'" class="btn btn-default" data-toggle="modal"><span class="glyphicon glyphicon-play" aria-hidden="true"></span>' +	
+	    	                           '</button>' + 	    	                           
+	    	                           '<button type="button" name="btn-script-delete" value="'+ row.id +'" class="btn btn-default" aria-label="Justify"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span>' +	
+	    	                           '</button>' +			                            
+	    	                           '</div>';
+   	    				},
+   	    				"className": "text-center",
+	    		        },
+	    		      ]	
+    var buttons = []    
+    InitScriptDataTable('deployScriptsList','/api/deploy/scripts/',buttons,columns,columnDefs);    	  
+} 
+
+function makeDeployPlaybook() {
+    var columns = [                  
+                   {"data": "id"},
+                   {"data": "detail.playbook_name"},
+                   {"data": "detail.playbook_desc"},
+				   {"data": "detail.playbook_user"},
+                   {"data": "detail.create_time"},
+                   {"data": "detail.update_date"},
+	               ]
+   var columnDefs = [                     
+	    		        {
+   	    				targets: [6],
+   	    				render: function(data, type, row, meta) {  	    					
+   	                        return '<div class="btn-group  btn-group-sm">' +		    	                           
+	    	                           '<button type="button" name="btn-playbook-edit" value="'+ row.id +'" class="btn btn-default" data-toggle="modal"><span class="glyphicon glyphicon-play" aria-hidden="true"></span>' +	
+	    	                           '</button>' + 	    	                           
+	    	                           '<button type="button" name="btn-playbook-delete" value="'+ row.id +'" class="btn btn-default" aria-label="Justify"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span>' +	
+	    	                           '</button>' +			                            
+	    	                           '</div>';
+   	    				},
+   	    				"className": "text-center",
+	    		        },
+	    		      ]	
+    var buttons = []    
+    InitPlaybookDataTable('deployPlaybookList','/api/deploy/playbook/',buttons,columns,columnDefs);    	  
+} 
 
 $(document).ready(function() {
 	
@@ -324,7 +477,7 @@ $(document).ready(function() {
 		   var obj = document.getElementById("server_model"); 
 		   var index = obj.selectedIndex;
 		   var value = obj.options[index].value; 
-		   controlServerSelectHide(value);		   			  
+		   controlServerSelectHide(value);	
 	});
 	
 	$("#deploy_model").change(function(){
@@ -952,7 +1105,7 @@ $(document).ready(function() {
 		                }); 
 					}
 					else{
-		            	window.location.reload();	                				
+						RefreshScriptTable('deployScriptsList', '/api/deploy/scripts/');	                				
 					}
 					
 				},
@@ -1026,7 +1179,7 @@ $(document).ready(function() {
     	    
     	    websocket.onclose = function () {
     	    	btnObj.removeAttr('disabled');
-    	    }
+    	    }		    		    	
 	    })
 
 	    $('#run_deploy_script').on('click', function() {
@@ -1045,7 +1198,6 @@ $(document).ready(function() {
 		    	btnObj.removeAttr('disabled');
 		    	return false;
 		    };
-		    //$("#result").html("服务器正在处理，请稍等。。。\n");
 			var ansible_server = new Array();
 			$("select[name='custom'] option:selected").each(function(){
 				ansible_server.push($(this).val());
@@ -1076,51 +1228,36 @@ $(document).ready(function() {
 		    websocket.onmessage = function (event) {
 		    	out_print.append(event.data+'\n')
 		    };
+
 		    websocket.onerror = function(event) {
 		    	console.log(event)
 		    	websocket.close();
 				out_print.append('\n服务器连接异常\n\n');
-		    };
+		    };    
+		    
 		    websocket.onclose = function () {
 		    	btnObj.removeAttr('disabled');
-		    }
+		    }			    
+		        	
 	    }) 
 	    
 	  //new
       if ($("#deployScriptsList").length) {
-	    var table = $('#deployScriptsList').DataTable( {
-	        "order": [[5, 'desc']],
-			language : {
-				"sProcessing" : "处理中...",
-				"sLengthMenu" : "显示 _MENU_ 项结果",
-				"sZeroRecords" : "没有匹配结果",
-				"sInfo" : "显示第 _START_ 至 _END_ 项结果，共 _TOTAL_ 项",
-				"sInfoEmpty" : "显示第 0 至 0 项结果，共 0 项",
-				"sInfoFiltered" : "(由 _MAX_ 项结果过滤)",
-				"sInfoPostFix" : "",
-				"sSearch" : "搜索:",
-				"sUrl" : "",
-				"sEmptyTable" : "表中数据为空",
-				"sLoadingRecords" : "载入中...",
-				"sInfoThousands" : ",",
-				"oPaginate" : {
-					"sFirst" : "首页",
-					"sPrevious" : "上页",
-					"sNext" : "下页",
-					"sLast" : "末页"
-				},
-				"oAria" : {
-					"sSortAscending" : ": 以升序排列此列",
-					"sSortDescending" : ": 以降序排列此列"
-				}
-		},	        
-	    });	
+  	    $("button[name^='script_page_']").on("click", function(){
+	      	var url = $(this).val();
+	      	$(this).attr("disabled",true);
+	      	if (url.length){
+	      		RefreshScriptTable('deployScriptsList', url);
+	      	}      	
+	    	$(this).attr('disabled',false);
+	      }); 	    	  
+    	  makeDeployScripts()   	  
 	  }  
 	  //new
-	  $("button[name='btn-script-edit']").on("click", function(){
+	   $('#deployScriptsList tbody').on('click',"button[name='btn-script-edit']",function(){
 	    $('#add_deploy_tools').show();
-	    $('#add_deploy_result').show();
-		  $("#modf_deploy_script").show().val($(this).val())
+	    $('#add_deploy_result').show();	
+	    $("#modf_deploy_script").show().val($(this).val())
 	    $("#save_deploy_script").hide()
 		var btnObj = $(this);
 		btnObj.attr('disabled',true);		  
@@ -1141,10 +1278,10 @@ $(document).ready(function() {
 					}	
 					if (script["script_type"]=="tags"){
 						controlServerSelectHide(script["script_type"],script["script_tags"]);
-					}
-					else if(script["script_type"]=="business"){
+					}					
+					else if(script["script_type"]=="business"){	
 						controlServerSelectHide(script["script_type"],script["script_business"]);
-						$("select[name='business'] option[value='" + script["script_business"] +"']").attr("selected",true);
+						$("select[name='business'] option[value='" + script["script_business"] +"']").attr("selected",true);												
 					}
 					else if(script["script_type"]=="custom"){
 						controlServerSelectHide(script["script_type"]);
@@ -1250,7 +1387,7 @@ $(document).ready(function() {
     	  }
   	  });
 	  //new
-	  $("button[name='btn-script-delete']").on("click", function(){		  
+	  $('#deployScriptsList tbody').on('click',"button[name='btn-script-delete']",function(){	  
 			var btnObj = $(this);
 			btnObj.attr('disabled',true);		  
 		  	var vIds = $(this).val();
@@ -1274,20 +1411,23 @@ $(document).ready(function() {
 			                    text: "删除失败",
 			                    type: 'error',
 			                    styling: 'bootstrap3'
-			                });       
+			                });    
+			            	btnObj.attr('disabled',false);
 			            },  
-			            success: function(response) {  
+			            success: function(response) { 
+			            	btnObj.attr('disabled',false);
 			            	new PNotify({
 			                    title: 'Success!',
 			                    text: response["msg"],
 			                    type: 'success',
 			                    styling: 'bootstrap3'
 			                });	
-			            	window.location.reload();
+			            	RefreshPlaybookTable('deployScriptsList', '/api/deploy/scripts/');
 			            }  
 			    	});
 			        },
 			        取消: function () {
+			        	btnObj.attr('disabled',false);
 			            return true;			            
 			        },			        
 			    }
@@ -1295,33 +1435,15 @@ $(document).ready(function() {
 	  });
 	  //deploy_playbook
       if ($("#deployPlaybookList").length) {
-  	    var table = $('#deployPlaybookList').DataTable( {
-  	        "order": [[5, 'desc']],
-			language : {
-				"sProcessing" : "处理中...",
-				"sLengthMenu" : "显示 _MENU_ 项结果",
-				"sZeroRecords" : "没有匹配结果",
-				"sInfo" : "显示第 _START_ 至 _END_ 项结果，共 _TOTAL_ 项",
-				"sInfoEmpty" : "显示第 0 至 0 项结果，共 0 项",
-				"sInfoFiltered" : "(由 _MAX_ 项结果过滤)",
-				"sInfoPostFix" : "",
-				"sSearch" : "搜索:",
-				"sUrl" : "",
-				"sEmptyTable" : "表中数据为空",
-				"sLoadingRecords" : "载入中...",
-				"sInfoThousands" : ",",
-				"oPaginate" : {
-					"sFirst" : "首页",
-					"sPrevious" : "上页",
-					"sNext" : "下页",
-					"sLast" : "末页"
-				},
-				"oAria" : {
-					"sSortAscending" : ": 以升序排列此列",
-					"sSortDescending" : ": 以降序排列此列"
-				}
-		},  	        
-  	    });	
+    	    $("button[name^='playbook_page_']").on("click", function(){
+    	      	var url = $(this).val();
+    	      	$(this).attr("disabled",true);
+    	      	if (url.length){
+    	      		RefreshPlaybookTable('deployPlaybookList', url);
+    	      	}      	
+    	    	$(this).attr('disabled',false);
+    	      });     	  
+    	    makeDeployPlaybook()
   	  };
 	  $('#save_deploy_playbook').on('click', function() {
 			var btnObj = $(this);
@@ -1381,7 +1503,7 @@ $(document).ready(function() {
 		                }); 
 					}
 					else{
-		            	window.location.reload();	                				
+						RefreshPlaybookTable('deployPlaybookList', '/api/deploy/playbook/');	                				
 					}
 					
 				},
@@ -1397,7 +1519,7 @@ $(document).ready(function() {
 			})	    	
 	    });
 	  //new
-	  $("button[name='btn-playbook-edit']").on("click", function(){
+	  $('#deployPlaybookList tbody').on('click',"button[name='btn-playbook-edit']",function(){
 	    $('#add_deploy_tools').show();
 	    $('#add_deploy_result').show();			  
 		var btnObj = $(this);
@@ -1419,8 +1541,8 @@ $(document).ready(function() {
 					if (playbook["playbook_type"]=="tags"){
 						controlServerSelectHide(playbook["playbook_type"],playbook["playbook_tags"]);
 					} 					
-					else if(playbook["playbook_type"]=="business"){
-						controlServerSelectHide(playbook["playbook_type"],playbook["playbook_business"]);
+					else if(playbook["playbook_type"]=="business"){									
+						controlServerSelectHide(playbook["playbook_type"],playbook["playbook_business"]);	
 						$("select[name='business'] option[value='" + playbook["playbook_business"] +"']").attr("selected",true);
 					}
 					else if(playbook["playbook_type"]=="custom"){
@@ -1481,7 +1603,7 @@ $(document).ready(function() {
 						'playbook_id':vIds,
 						'playbook_desc':$("#playbook_desc").val(),
 						'server_model':server_model,
-						'service':$('select[name="service"] option:selected').val(),
+						'business':$('select[name="business"] option:selected').val(),
 						'group':$('select[name="group"] option:selected').val(),
 						'tags':$('select[name="tags"] option:selected').val(),
 						'inventory_groups':$('select[name="inventory_groups"] option:selected').val(),
@@ -1498,6 +1620,7 @@ $(document).ready(function() {
 			                    type: 'success',
 			                    styling: 'bootstrap3'
 			                });
+			            	RefreshPlaybookTable('deployPlaybookList', '/api/deploy/playbook/');
 						}else{
 			            	new PNotify({
 			                    title: 'Ops Failed!',
@@ -1550,8 +1673,7 @@ $(document).ready(function() {
 		            }); 
 			    	btnObj.removeAttr('disabled');
 			    	return false;
-			    };	
-			    //$("#result").html("服务器正在处理，请稍等。。。");
+			    };
 				var ansible_server = new Array();
 				$("#deploy_server option:selected").each(function(){
 					ansible_server.push($(this).val());
@@ -1585,11 +1707,12 @@ $(document).ready(function() {
 			    websocket.onerror = function(event) {
 			    	console.log(event)
 			    	websocket.close();
-					out_print.append('\n服务器连接异常\n\n');
-			    };
+			    	out_print.append('\n服务器连接异常\n\n');
+			    };    
+			    
 			    websocket.onclose = function () {
 			    	btnObj.removeAttr('disabled');
-			    }
+			    }				
   				
 			}else{
 				btnObj.removeAttr('disabled');
@@ -1606,8 +1729,7 @@ $(document).ready(function() {
 			}				
 	    });	  
 	  
-	  //new
-	  $("button[name='btn-playbook-delete']").on("click", function(){		  
+	  $('#deployPlaybookList tbody').on('click',"button[name='btn-playbook-delete']",function(){		  
 			var btnObj = $(this);
 			btnObj.attr('disabled',true);		  
 		  	var vIds = $(this).val();
@@ -1626,6 +1748,7 @@ $(document).ready(function() {
 			            	"playbook_id":vIds
 			            },
 			            error: function(response) {  
+			            	btnObj.attr('disabled',false);
 			            	new PNotify({
 			                    title: 'Ops Failed!',
 			                    text: "删除失败",
@@ -1634,17 +1757,19 @@ $(document).ready(function() {
 			                });       
 			            },  
 			            success: function(response) {  
+			            	btnObj.attr('disabled',false);
 			            	new PNotify({
 			                    title: 'Success!',
 			                    text: response["msg"],
 			                    type: 'success',
 			                    styling: 'bootstrap3'
 			                });	
-			            	window.location.reload();
+			            	RefreshPlaybookTable('deployPlaybookList', '/api/deploy/playbook/');
 			            }  
 			    	});
 			        },
 			        取消: function () {
+			        	btnObj.attr('disabled',false);
 			            return true;			            
 			        },			        
 			    }
@@ -1652,4 +1777,3 @@ $(document).ready(function() {
 	  });	  
 	    
 }); 
-

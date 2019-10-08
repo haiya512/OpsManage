@@ -192,12 +192,26 @@ class ServerSerializer(serializers.ModelSerializer):
         return server
 
 
+class DeployScriptSerializer(serializers.ModelSerializer):
+    detail = serializers.SerializerMethodField(read_only=True, required=False)
+
+    class Meta:
+        model = Deploy_Script
+        fields = ('id', 'detail')
+
+    def get_detail(self, obj):
+        return obj.to_json()
+
+
 class DeployPlaybookSerializer(serializers.ModelSerializer):
+    detail = serializers.SerializerMethodField(read_only=True, required=False)
+
     class Meta:
         model = Deploy_Playbook
-        fields = ('id', 'playbook_name', 'playbook_desc', 'playbook_vars',
-                  'playbook_uuid', 'playbook_file', 'playbook_auth_group',
-                  'playbook_auth_user')
+        fields = ('id', 'detail')
+
+    def get_detail(self, obj):
+        return obj.to_json()
 
 
 class DeployModelLogsSerializer(serializers.ModelSerializer):
@@ -283,9 +297,9 @@ class DataBaseServerSerializer(serializers.ModelSerializer):
 class DatabaseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Database_Detail
-        fields = ('id','db_name','db_size')
+        fields = ('id', 'db_name', 'db_size')
 
-    def create(self,  validated_data):
+    def create(self, validated_data):
         return Database_Detail.objects.create(db_server=self.context["db_server"], **validated_data)
 
 

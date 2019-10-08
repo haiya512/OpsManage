@@ -1,9 +1,9 @@
 from django.conf.urls import url
 from apps.api.views import (assets_api, deploy_api, db_api,
-                       users_api, orders_api, cron_api,
-                       celery_api, cicd_api, monitor_api,
-                       nav_api, wiki_api, apscehd_api,
-                       ipvs_api)
+                            users_api, orders_api, cron_api,
+                            celery_api, cicd_api, monitor_api,
+                            nav_api, wiki_api, apscehd_api,
+                            ipvs_api)
 
 app_name = "api"
 urlpatterns = [
@@ -42,6 +42,8 @@ urlpatterns = [
     url(r'^server/(?P<id>[0-9]+)/$', assets_api.asset_server_detail),
     url(r'^net/$', assets_api.asset_net_list),
     url(r'^net/(?P<id>[0-9]+)/$', assets_api.asset_net_detail),
+    url(r'^deploy/scripts/$', deploy_api.DeployScriptList.as_view()),
+    url(r'^deploy/playbook/$', deploy_api.DeployPlayBookList.as_view()),
     url(r'^inventory/$', deploy_api.inventory_list),
     url(r'^inventory/(?P<id>[0-9]+)/$', deploy_api.inventory_detail),
     url(r'^inventory/groups/(?P<id>[0-9]+)/$', deploy_api.deploy_inventory_groups),
