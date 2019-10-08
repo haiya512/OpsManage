@@ -124,6 +124,7 @@ class DataBase_Server_Config(models.Model):
             "db_user": self.db_user,
             "db_passwd": self.db_passwd,
             "db_rw": self.db_rw,
+            "db_mark": self.db_mark
         }
         return json_format
 

@@ -30,7 +30,7 @@ class MySQLARCH(object):
         self.mysql_status = self.mysql.get_status()
         self.db_server = db_server
         self.arch_info = {
-            'title': self.db_server.db_mark,
+            'title': self.db_server.get("db_mark"),
             'className': 'product-dept',
             'children': []
         }
@@ -39,7 +39,7 @@ class MySQLARCH(object):
         slave_data = {}
         for ds in self.mysql.get_master_status():
             if ds.get('name') == 'Slave': slave_data[
-                self.db_server.db_assets.server_assets.ip + ':' + str(self.db_server.db_port)] = ds.get('value')
+                self.db_server.self.db_server.get("ip") + ':' + str(self.db_server.get("db_port"))] = ds.get('value')
         return slave_data
 
     def pxc(self):
@@ -585,17 +585,17 @@ class DBManage(AssetsBase):
             record_exec_sql.apply_async(
                 (request.user.username, dbServer.get('id'), request.POST.get('sql'), time_consume, 0), queue='default')
 
-    def __query_user_db_server(self,request=None):
+    def __query_user_db_server(self, request=None):
         if request.user.is_superuser:
             dbList = DataBase_Server_Config.objects.all()
         else:
-            user_db_list = [ ud.db for ud in Database_User.objects.filter(user=request.user.id) ]
-            dbList = [ ds.db_server for ds in Database_Detail.objects.filter(id__in=user_db_list)]
+            user_db_list = [ud.db for ud in Database_User.objects.filter(user=request.user.id)]
+            dbList = [ds.db_server for ds in Database_Detail.objects.filter(id__in=user_db_list)]
         return dbList
 
-    def recursive_node_to_dict(self, node, request,user_db_server_list):
+    def recursive_node_to_dict(self, node, request, user_db_server_list):
         json_format = node.to_json()
-        children = [self.recursive_node_to_dict(c, request,user_db_server_list) for c in node.get_children()]
+        children = [self.recursive_node_to_dict(c, request, user_db_server_list) for c in node.get_children()]
         if children:
             json_format['children'] = children
         else:
@@ -625,12 +625,15 @@ class DBManage(AssetsBase):
         return tree_list
 
     def tree(self, request):
-        user_db_server_list =  [ ds.id for ds in self.__query_user_db_server(request) ]
+        user_db_server_list = [ds.id for ds in self.__query_user_db_server(request)]
         if request.user.is_superuser:
-            user_business = [ ds.get("db_business") for ds in DataBase_Server_Config.objects.values('db_business').annotate(dcount=Count('db_business')) ]
+            user_business = [ds.get("db_business") for ds in
+                             DataBase_Server_Config.objects.values('db_business').annotate(dcount=Count('db_business'))]
 
         else:
-            user_business = [ ds.get("db_business") for ds in DataBase_Server_Config.objects.filter(id__in=user_db_server_list).values('db_business').annotate(dcount=Count('db_business')) ]
+            user_business = [ds.get("db_business") for ds in
+                             DataBase_Server_Config.objects.filter(id__in=user_db_server_list).values(
+                                 'db_business').annotate(dcount=Count('db_business'))]
 
         business_list = []
         for business in Business_Tree_Assets.objects.filter(id__in=user_business):
@@ -640,5 +643,5 @@ class DBManage(AssetsBase):
         root_nodes = cache_tree_children(business_node)
         dataList = []
         for n in root_nodes:
-            dataList.append(self.recursive_node_to_dict(n,request,user_db_server_list))
+            dataList.append(self.recursive_node_to_dict(n, request, user_db_server_list))
         return dataList
