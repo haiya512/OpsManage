@@ -490,7 +490,8 @@
 			var table = $('#assetsListTable').DataTable();
 			$(this).attr('disabled',true);
 	    	var vIds = $(this).val();
-	    	var ip = $("#assets_"+vIds).text(); 
+	    	var td = $(this).parent().parent().parent().find("td")
+	    	var ip = td.eq(4).text();
 			$.confirm({
 			    title: '更新确认',
 			    content: ip,
@@ -542,7 +543,8 @@
 		$('#assetsListTable tbody').on('click','button[name="btn-assets-hw"]',function(){
 			$(this).attr('disabled',true);
 	    	var vIds = $(this).val();
-	    	var ip = $("#assets_"+vIds).text(); 
+	    	var td = $(this).parent().parent().parent().find("td")
+	    	var ip = td.eq(4).text();
 			$.confirm({
 			    title: '更新内存硬盘信息',
 			    content: ip,
@@ -593,7 +595,8 @@
 		 //删除资产
 	     $('#assetsListTable tbody').on('click','button[name="btn-assets-delete"]',function(){
 	    	var vIds = $(this).val();
-	    	var ip = $("#assets_"+vIds).text(); 
+	    	var td = $(this).parent().parent().parent().find("td")
+	    	var ip = td.eq(4).text();
 			$.confirm({
 			    title: '删除确认',
 			    content: ip,
@@ -636,7 +639,8 @@
 	$('#assetsListTable tbody').on('click','button[name="btn-assets-info"]',function(){
 		$(this).attr('disabled',true);
     	var vIds = $(this).val();
-    	var ip = $("#assets_"+vIds).text(); 
+    	var td = $(this).parent().parent().parent().find("td")
+	    	var ip = td.eq(4).text();
     	$.ajax({  
             cache: true,  
             type: "GET",  
