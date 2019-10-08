@@ -67,28 +67,14 @@ class DeployInventoryGroups(LoginRequiredMixin, View):
                 seletcd = 1
             else:
                 seletcd = 0
-            try:
-                project = Project_Assets.objects.get(id=assets.project).project_name
-            except Exception as ex:
-                project = '未知'
-                logger.warn(msg="查询主机项目信息失败: {ex}".format(ex=str(ex)))
-            try:
-                service = Service_Assets.objects.get(id=assets.business).service_name
-            except Exception as ex:
-                service = '未知'
-                logger.warn(msg="查询主机应用信息失败: {ex}".format(ex=str(ex)))
             if hasattr(assets, 'server_assets'):
                 try:
-                    dataList.append(
-                        {"id": assets.id, "ip": assets.server_assets.ip, "project": project, "service": service,
-                         "seletcd": seletcd})
+                    dataList.append({"id": assets.id, "ip": assets.server_assets.ip, "seletcd": seletcd})
                 except Exception as ex:
                     logger.warn(msg="id:{assets}, error:{ex}".format(assets=assets.id, ex=ex))
             elif hasattr(assets, 'network_assets'):
                 try:
-                    dataList.append(
-                        {"id": assets.id, "ip": assets.network_assets.ip, "project": project, "service": service,
-                         "seletcd": seletcd})
+                    dataList.append({"id": assets.id, "ip": assets.network_assets.ip, "seletcd": seletcd})
                 except Exception as ex:
                     logger.warn(msg="id:{assets}, error:{ex}".format(assets=assets.id, ex=ex))
         return JsonResponse(
