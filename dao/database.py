@@ -14,7 +14,6 @@ from utils.mysql.binlog2sql import Binlog2sql
 from apps.tasks.celery_sql import record_exec_sql
 from django.db.models import Count
 from mptt.templatetags.mptt_tags import cache_tree_children
-from django.db.models import Q
 
 
 def format_time(seconds):

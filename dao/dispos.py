@@ -1,8 +1,7 @@
 #!/usr/bin/env python  
 # _#_ coding:utf-8 _*_ 
-#coding: utf8
 import os, json, uuid
-from deploy.models import *
+from apps.deploy.models import *
 from utils.logger import logger 
 from django.http import QueryDict
 from dao.base import DataHandle

@@ -1,7 +1,7 @@
 #!/usr/bin/env python  
 # _#_ coding:utf-8 _*_  
 from django.db import models
-from asset.models import Business_Tree_Assets
+from apps.asset.models import Business_Tree_Assets
 
 
 class IPVS_CONFIG(models.Model):
