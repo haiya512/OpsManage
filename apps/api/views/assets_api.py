@@ -54,14 +54,9 @@ def group_detail(request, id, format=None):
         return Response(serializer.data)
 
     elif request.method == 'PUT' and request.user.has_perm('asset.change_group'):
-        if not request.user.has_perm('asset.change_project_assets'):
-            # return Response(status=status.HTTP_403_FORBIDDEN)
         serializer = serializers.GroupSerializer(snippet, data=request.data)
-        # old_name = snippet.project_name
         if serializer.is_valid():
             serializer.save()
-            # recordAssets.delay(user=str(request.user),content="修改用户组名称：{old_name} -> {group_name}".format(
-            # old_name=old_name,project_name=request.data.get("name")),type="group",id=id)
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -69,7 +64,6 @@ def group_detail(request, id, format=None):
         if not request.user.has_perm('asset.delete_group'):
             return Response(status=status.HTTP_403_FORBIDDEN)
         snippet.delete()
-        # recordAssets.delay(user=str(request.user),content="删除用户组：{group_name}".format(group_name=snippet.name),type="group",id=id)
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 

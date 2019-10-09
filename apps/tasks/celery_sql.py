@@ -1,7 +1,7 @@
 #!/usr/bin/env python  
 # _#_ coding:utf-8 _*_ 
 from celery import task
-from apps.databases.models import (SQL_Execute_Histroy, Database_Detail)
+from databases.models import (SQL_Execute_Histroy, Database_Detail)
 
 
 @task

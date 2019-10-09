@@ -4,8 +4,8 @@ from django.http import QueryDict
 from django.views.generic import View
 from django.http import JsonResponse
 from django.shortcuts import render
-from apps.asset.models import Assets
-from apps.deploy.models import *
+from asset.models import Assets
+from deploy.models import *
 from dao.dispos import DeployScript, DeployPlaybook
 from dao.redisdb import DsRedis
 from django.contrib.auth.decorators import permission_required

@@ -4,10 +4,9 @@ import random, os, json
 from dao.base import DjangoCustomCursors, DataHandle, Struct
 from dao.assets import AssetsSource, AssetsBase
 from django.contrib.auth.models import User
-from apps.filemanage.models import *
-from apps.orders.models import *
-from apps.databases.models import Database_Detail
-from dao.redisdb import DsRedis
+from filemanage.models import *
+from orders.models import *
+from databases.models import Database_Detail
 from utils.ansible.runner import ANSRunner
 from utils import base, mysql
 from utils.mysql import cmds

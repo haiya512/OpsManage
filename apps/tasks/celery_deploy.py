@@ -5,7 +5,7 @@ from celery import task
 from dao.dispos import DeployRecord
 from utils.ansible.runner import ANSRunner
 from dao.assets import AssetsAnsible
-from apps.deploy.models import Deploy_Script, Deploy_Playbook
+from deploy.models import Deploy_Script, Deploy_Playbook
 
 
 @task

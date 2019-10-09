@@ -2,8 +2,8 @@
 # _#_ coding:utf-8 _*_ 
 import pymysql
 from celery import task
-from apps.asset.models import Assets, Server_Assets, NetworkCard_Assets
-from apps.databases.models import DataBase_Server_Config
+from asset.models import Assets, Server_Assets, NetworkCard_Assets
+from databases.models import DataBase_Server_Config
 from utils.ansible.runner import ANSRunner
 
 

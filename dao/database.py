@@ -1,17 +1,17 @@
 #!/usr/bin/env python  
 # _#_ coding:utf-8 _*_ 
-import os, json, queue, time
-from apps.databases.models import *
+import json, time
+from databases.models import *
 from utils.logger import logger
 from .assets import AssetsBase
-from apps.asset.models import *
+from asset.models import *
 from django.http import QueryDict
 from datetime import datetime
 from django.contrib.auth.models import User
 from dao.base import MySQLPool
 from utils import base
 from utils.mysql.binlog2sql import Binlog2sql
-from apps.tasks.celery_sql import record_exec_sql
+from tasks.celery_sql import record_exec_sql
 from django.db.models import Count
 from mptt.templatetags.mptt_tags import cache_tree_children
 
@@ -390,7 +390,7 @@ class DBManage(AssetsBase):
 
         if dbServer and request.user.has_perm(perms):
             try:
-                if Database_User.objects.get(user=request.user.id, db=dbServer.get("id"))):
+                if Database_User.objects.get(user=request.user.id, db=dbServer.get("id")):
                     return dbServer
             except Exception as ex:
                 logger.warn(msg="查询用户数据库信息失败: {ex}".format(ex=str(ex)))

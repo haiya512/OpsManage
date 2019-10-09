@@ -55,7 +55,7 @@ class Project_Config(models.Model):
     def business_paths(self):
         try:
             business = Business_Tree_Assets.objects.get(id=self.project_business)
-            return business.business_env() + '/' +business.node_path()
+            return business.business_env() + '/' + business.node_path()
         except:
             return "未知"
 

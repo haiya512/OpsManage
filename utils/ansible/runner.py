@@ -1,11 +1,10 @@
 #!/usr/bin/env python
 # -*- coding=utf-8 -*-
-import os, re
-from collections import Mapping, namedtuple
+import re
+from collections import namedtuple
 from ansible import constants
 from ansible.playbook.play import Play
 from ansible.vars.manager import VariableManager
-from ansible.inventory.manager import InventoryManager
 from ansible.executor.task_queue_manager import TaskQueueManager
 from ansible.parsing.dataloader import DataLoader
 from ansible.executor.playbook_executor import PlaybookExecutor

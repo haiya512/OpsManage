@@ -1,9 +1,9 @@
 from django.conf.urls import url
-from apps.api.views import (assets_api, deploy_api, db_api,
-                            users_api, orders_api, cron_api,
-                            celery_api, cicd_api, monitor_api,
-                            nav_api, wiki_api, apscehd_api,
-                            ipvs_api)
+from api.views import (assets_api, deploy_api, db_api,
+                        users_api, orders_api, cron_api,
+                        celery_api, cicd_api, monitor_api,
+                        nav_api, wiki_api, apscehd_api,
+                        ipvs_api)
 
 app_name = "api"
 urlpatterns = [
@@ -28,7 +28,7 @@ urlpatterns = [
     url(r'^user/(?P<id>[0-9]+)/$', users_api.user_detail),
     url(r'^idc/$', assets_api.idc_list),
     url(r'^idc/(?P<id>[0-9]+)/$', assets_api.idc_detail),
-    url(r'^idc/idle/$', assets_api.idle_list),
+    # url(r'^idc/idle/$', assets_api.idle_list),
     url(r'^idc/idle/(?P<id>[0-9]+)/$', assets_api.idle_detail),
     url(r'^zone/$', assets_api.zone_list),
     url(r'^zone/(?P<id>[0-9]+)/$', assets_api.zone_detail),

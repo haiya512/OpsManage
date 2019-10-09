@@ -302,45 +302,10 @@ class NetworkCard_Assets(models.Model):
         unique_together = (("assets", "macaddress"),)
 
 
-# class Project_Assets(models.Model):
-#     '''产品线资产表'''
-#     project_name = models.CharField(max_length=100, unique=True)
-#     project_owner = models.SmallIntegerField(blank=True, null=True, verbose_name='项目负责人')
-#
-#     class Meta:
-#         db_table = 'opsmanage_project_assets'
-#         default_permissions = ()
-#         permissions = (
-#             ("add_project_assets", "添加产品线权限"),
-#             ("change_project_assets", "更改产品线权限"),
-#             ("delete_project_assets", "删除产品线权限"),
-#             ("read_project_assets", "读取产品线权限"),
-#         )
-#         verbose_name = '资产管理'
-#         verbose_name_plural = '项目资产表'
-
-
-# class Service_Assets(models.Model):
-#     '''业务分组表'''
-#     project = models.ForeignKey('Project_Assets', related_name='service_assets', on_delete=models.CASCADE)
-#     service_name = models.CharField(max_length=100)
-#
-#     class Meta:
-#         db_table = 'opsmanage_service_assets'
-#         default_permissions = ()
-#         permissions = (
-#             ("add_service_assets", "添加业务资产权限"),
-#             ("change_service_assets", "更改业务资产权限"),
-#             ("delete_service_assets", "删除业务资产权限"),
-#             ("read_service_assets", "读取业务资产权限"),
-#         )
-#         unique_together = (("project", "service_name"),)
-#         verbose_name = '资产管理'
-#         verbose_name_plural = '业务分组表'
-
-
 class Business_Env_Assets(models.Model):
-    '''业务环境资产表'''
+    """
+    业务环境资产表
+    """
     name = models.CharField(default="测试环境", max_length=100, unique=True)
 
     class Meta:
@@ -373,7 +338,6 @@ class Business_Tree_Assets(MPTTModel):
         verbose_name_plural = '业务节点资产表'
 
         def __unicode__(self):
-
             return self.text
 
     def business_env(self):
@@ -450,14 +414,35 @@ class Zone_Assets(models.Model):
         verbose_name_plural = '区域资产表'
 
 
+class Idc_Assets(models.Model):
+    zone = models.ForeignKey('Zone_Assets', related_name='idc_assets', on_delete=models.CASCADE)
+    idc_name = models.CharField(max_length=32, verbose_name=u'机房名称')
+    idc_bandwidth = models.CharField(max_length=32, blank=True, null=True, default='', verbose_name=u'机房带宽')
+    idc_linkman = models.CharField(max_length=16, blank=True, null=True, default='', verbose_name=u'联系人')
+    idc_phone = models.CharField(max_length=32, blank=True, null=True, default='', verbose_name=u'联系电话')
+    idc_address = models.CharField(max_length=128, blank=True, null=True, default='', verbose_name=u"机房地址")
+    idc_network = models.TextField(blank=True, null=True, default='', verbose_name=u"IP地址段")
+    update_time = models.DateField(auto_now=True, null=True)
+    idc_operator = models.CharField(max_length=32, blank=True, default='', null=True, verbose_name=u"运营商")
+    idc_desc = models.CharField(max_length=128, blank=True, default='', null=True, verbose_name=u"备注")
+    '''自定义权限'''
+
+    class Meta:
+        db_table = 'opsmanage_idc_assets'
+        default_permissions = ()
+        verbose_name = '资产管理'
+        verbose_name_plural = '机房资产表'
+
+
 class Idle_Assets(models.Model):
-    idc = models.ForeignKey('Idc_Assets',related_name='idle_assets', on_delete=models.CASCADE)
-    idle_name = models.CharField(max_length=100,verbose_name='名称')
+    idc = models.ForeignKey('Idc_Assets', related_name='idle_assets', on_delete=models.CASCADE)
+    idle_name = models.CharField(max_length=100, verbose_name='名称')
     idle_number = models.SmallIntegerField(verbose_name='剩余个数')
     idle_user = models.SmallIntegerField(verbose_name='记录人员')
     idle_desc = models.CharField(max_length=128, blank=True, default='', null=True, verbose_name=u"备注")
-    update_time = models.DateTimeField(auto_now=True,blank=True,null=True,verbose_name='修改时间')
+    update_time = models.DateTimeField(auto_now=True, blank=True, null=True, verbose_name='修改时间')
     '''自定义权限'''
+
     class Meta:
         unique_together = (("idc", "idle_name"))
         default_permissions = ()
@@ -478,7 +463,7 @@ class Cabinet_Assets(models.Model):
     '''自定义权限'''
 
     class Meta:
-        unique_together = (("idc", "cabinet_name"),)
+        unique_together = (("zone", "cabinet_name"),)
         default_permissions = ()
         permissions = (
             ("add_cabinet_assets", "添加CABINET资产权限"),
@@ -492,9 +477,9 @@ class Cabinet_Assets(models.Model):
 
 
 class Line_Assets(models.Model):
-    line_name = models.CharField(max_length=100,unique=True)
-    line_price = models.CharField(max_length=20,blank=True, default='', null=True,verbose_name=u"价格")
-    update_time = models.DateTimeField(auto_now=True,blank=True,null=True,verbose_name='修改时间')
+    line_name = models.CharField(max_length=100, unique=True)
+    line_price = models.CharField(max_length=20, blank=True, default='', null=True, verbose_name=u"价格")
+    update_time = models.DateTimeField(auto_now=True, blank=True, null=True, verbose_name='修改时间')
     '''自定义权限'''
 
     class Meta:

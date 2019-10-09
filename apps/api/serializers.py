@@ -1,16 +1,15 @@
 # !/usr/bin/env python
 # _#_ coding:utf-8 _*_  
 from rest_framework import serializers
-from apps.asset.models import *
-from apps.databases.models import *
-from apps.deploy.models import *
-from apps.orders.models import *
+from asset.models import *
+from databases.models import *
+from deploy.models import *
 from sched.models import *
-from apps.cicd.models import *
-from apps.navbar.models import *
-from apps.wiki.models import *
-from apps.orders.models import *
-from apps.apply.models import *
+from cicd.models import *
+from navbar.models import *
+from wiki.models import *
+from orders.models import *
+from apply.models import *
 from django.contrib.auth.models import Group, User
 from django_celery_beat.models import CrontabSchedule, IntervalSchedule, PeriodicTask
 from django_celery_results.models import TaskResult
@@ -571,7 +570,7 @@ class OrdersNoticeConfigSerializer(serializers.ModelSerializer):
 class IPVSSerializer(serializers.ModelSerializer):
     sip = serializers.CharField(source='ipvs_assets.server_assets.ip', read_only=True)
     rs_count = serializers.SerializerMethodField(read_only=True, required=False)
-    #     rs_list = serializers.SerializerMethodField(read_only=True,required=False)
+    # rs_list = serializers.SerializerMethodField(read_only=True,required=False)
     business_paths = serializers.SerializerMethodField(read_only=True, required=False)
 
     class Meta:

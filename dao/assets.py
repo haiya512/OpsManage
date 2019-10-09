@@ -430,7 +430,7 @@ class AssetsCount(DjangoCustomCursors):
             logger.error(msg="统计业务组主机资产失败:{ex}".format(ex=ex))
         return self.dataList
 
-    def zoneAssets(self):
+    def idcAssets(self):
         try:
             return [{"count": ds.count, "idc_name": ds.idc_name} for ds in Idc_Assets.objects.raw(
                 """SELECT t1.id,count(*) as count,t1.idc_name from opsmanage_idc_assets t1, opsmanage_assets t2 WHERE t2.put_zone = t1.id GROUP BY t2.put_zone""")]

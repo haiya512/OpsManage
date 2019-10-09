@@ -82,9 +82,8 @@ class SQL_Audit_Order(models.Model):
             "order_file": self.order_file,
             "order_err": self.order_err,
             "sql_backup": self.sql_backup,
-            "db": {}
+            "db": self.order_db.to_json()
         }
-        json_format["db"] = self.order_db.to_json()
         return json_format
 
 

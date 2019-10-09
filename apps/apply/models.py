@@ -1,7 +1,7 @@
 #!/usr/bin/env python  
 # _#_ coding:utf-8 _*_  
 from django.db import models
-from apps.asset.models import Business_Tree_Assets
+from asset.models import Business_Tree_Assets
 
 
 class IPVS_CONFIG(models.Model):
@@ -19,10 +19,10 @@ class IPVS_CONFIG(models.Model):
 
     ipvs_assets = models.ForeignKey('asset.Assets', related_name='ipvs_total', on_delete=models.CASCADE,
                                     verbose_name='assets_id')
-    vip = models.CharField(max_length=100, verbose_name='VIP')
-    port = models.IntegerField(verbose_name='端口')
-    business = models.IntegerField(verbose_name='业务关联')
-    scheduler = models.CharField(choices=scheduler_mode, max_length=10, verbose_name='调度算法')
+    vip = models.CharField(max_length=100, verbose_name='VIP', blank=True, null=True)
+    port = models.IntegerField(verbose_name='端口', blank=True, null=True)
+    business = models.IntegerField(verbose_name='业务关联', blank=True, null=True)
+    scheduler = models.CharField(choices=scheduler_mode, max_length=10, verbose_name='调度算法', blank=True, null=True)
     protocol = models.CharField(choices=protocol_type, max_length=10, verbose_name='tcp/udp', default='-t')
     persistence = models.IntegerField(verbose_name='转发模式', blank=True, null=True)
     line = models.CharField(max_length=100, verbose_name='线路描述', blank=True, null=True)

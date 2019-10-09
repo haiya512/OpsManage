@@ -1,8 +1,8 @@
 #!/usr/bin/env python  
 # _#_ coding:utf-8 _*_
-from apps.api import serializers
-from apps.deploy.models import *
-from apps.asset.models import *
+from api import serializers
+from deploy.models import *
+from asset.models import *
 from rest_framework import status
 from rest_framework.decorators import api_view
 from django.contrib.auth.decorators import permission_required

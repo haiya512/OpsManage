@@ -25,8 +25,6 @@ except ImportError as e:
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-sys.path.insert(0, os.path.join(BASE_DIR, 'apps'))
-
 config = conf.ConfigParser()
 config.read(os.path.join(BASE_DIR, 'conf/opsmanage.ini'))
 
@@ -72,24 +70,22 @@ INSTALLED_APPS = [
     'mptt',
     'channels',
     'OpsManage',
-    'apps.navbar',
-    'apps.databases',
-    'apps.asset',
-    'apps.api',
-    'apps.deploy',
-    'apps.orders',
-    'apps.wiki',
-    'apps.filemanage',
-    'apps.cicd',
-    'apps.sched',
+    'navbar',
+    'databases',
+    'asset',
+    'api',
+    'deploy',
+    'orders',
+    'wiki',
+    'filemanage',
+    'cicd',
+    'sched',
     'django_celery_beat',
     'django_celery_results',
     'websocket',
-    'apps.apply',
+    'apply',
     "doujiang_guofu",
 ]
-
-SITE_ID = 1
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -193,6 +189,8 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
 ]
+
+sys.path.insert(0, os.path.join(BASE_DIR, 'apps'))
 
 if config.get('ldap', 'enable') == 'true':
     ldap_filter = config.get('ldap', 'filter')

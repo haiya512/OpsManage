@@ -1,7 +1,7 @@
 #!/usr/bin/env python  
 # _#_ coding:utf-8 _*_  
 from django.db import models
-from apps.asset.models import Business_Tree_Assets
+from asset.models import Business_Tree_Assets
 
 
 class DataBase_Server_Config(models.Model):
@@ -43,11 +43,11 @@ class DataBase_Server_Config(models.Model):
     db_type = models.CharField(max_length=10, verbose_name='数据库类型', blank=True, null=True)
     db_assets = models.ForeignKey('asset.Assets', related_name='database_total', on_delete=models.CASCADE,
                                   verbose_name='assets_id')
-    db_business = models.IntegerField(verbose_name='业务关联')
+    db_business = models.IntegerField(verbose_name='业务关联', blank=True, null=True)
     db_mode = models.CharField(max_length=10, choices=mode, verbose_name='架构类型', default='single')
     db_user = models.CharField(max_length=100, verbose_name='用户', blank=True, null=True)
     db_passwd = models.CharField(max_length=100, verbose_name='密码', blank=True, null=True)
-    db_port = models.IntegerField(verbose_name='端口')
+    db_port = models.IntegerField(verbose_name='端口', blank=True, null=True)
     db_version = models.CharField(max_length=100, verbose_name='数据库版本', blank=True, null=True)
     db_mark = models.CharField(max_length=100, verbose_name='标识', blank=True, null=True)
     db_rw = models.CharField(choices=rw_type, max_length=20, verbose_name='读写类型', blank=True, null=True)
